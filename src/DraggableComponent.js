@@ -20,7 +20,7 @@ class DraggableComponent extends Component {
       return null;
     }
 
-    const {left,top,connectDragSource} = this.props;
+    const {left,top,connectDragSource,className} = this.props;
 
     var style = {
       left:left*100+"%",
@@ -30,9 +30,11 @@ class DraggableComponent extends Component {
     if(this.props.style) {
       Object.assign(style, this.props.style);
     }
+
+    const classes = `${this.props.className} component`
     return (
       connectDragSource(
-        <div className="component" style={style} >
+        <div className={classes} style={style} >
           {this.props.children}
         </div>)
     );

@@ -69,27 +69,33 @@ class Rasia extends Component {
       out: OutSetup,
       box: BoxSetup
     }
+    const types = {
+      "in":"music",
+      "box":"th",
+      "out":"bullhorn"
+    }
+
 
     const Comp = components[type];
     const Setup = setups[type];
-    var style = {}
 
     let dx = -0.015; // %-width and height of half of component
     let dy = -0.028;
+    let style = {}
     if(this.props.selected) {
       style = {fontSize:"2em" }
       dx *= 2;
       dy *= 2;
     }
+    let className= `comp-${type}`;
     return (
-      <div>
-        <div  onDoubleClick={this.handleEvent}
-              onContextMenu={this.handleEvent}
-              onClick={this.handleEvent} >
-          <DraggableComponent  style={style} left={left+dx} top={top+dy} id={id}>
-            <Comp id={id} {...spec}/>
+      <div onDoubleClick={this.handleEvent}
+            onContextMenu={this.handleEvent}
+            onClick={this.handleEvent}>
+          <DraggableComponent  className={className} style={style} left={left+dx} top={top+dy} id={id}>
+            <Glyphicon glyph={types[type]}/>{spec.name}
+            {/* <Comp id={id} {...spec}/> */}
           </DraggableComponent>
-        </div>
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
             <Modal.Title>Edit {spec.name}</Modal.Title>
