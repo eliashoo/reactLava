@@ -1,102 +1,137 @@
 import React, { Component } from 'react';
-import lavaPic from './lava2.jpg';
-import Rasia from './Rasia.js';
-import {Col} from 'react-bootstrap';
-import AddElement from './AddElement.js'
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-import { DropTarget } from 'react-dnd';
 
-const rasiaTarget = {
-  drop(props, monitor, component) {
-    const delta = monitor.getDifferenceFromInitialOffset();
-    const item = monitor.getItem();
-    const {left,top,id} = monitor.getItem();
+import Lava from './Lava.js';
 
-    component.moveTo(id,left+delta.x, top+delta.y);
-  }
-};
-
-function collect(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-  };
-}
-
-
-const style = {
-  marginTop:"3em"
-}
 var id = 0;
-class Lava extends Component {
+class LavaContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {inouts:[],show:false,clientX:0,clientY:0,selected:null};
+    this.state = {
+      inouts:[],
+      show:false,
+      clientX:0,
+      clientY:0,
+      selected:null,
+      showAddElement:false,
+      selectedElement:null,
+      toggle:false
+    };
   }
-  handleClick = (e) => {
+  setDiv = (div) => {
+    this.div = div;
+  }
+  handleStageClick = (e) => {
     if(this.state.selected !== null) {
-      var {left,top} = this.div.getBoundingClientRect();
-
-      this.moveTo(this.state.selected, e.clientX-left,e.clientY-top);
-      this.setState({selected:null});
+      var {width,height} = this.div.getBoundingClientRect();
+      const divLeft = this.div.getBoundingClientRect().left;
+      const divTop = this.div.getBoundingClientRect().top;
+      const idx = this.state.inouts.findIndex( inout => inout.id === this.state.selected);
+      let {left,top} = this.state.inouts[idx];
+      left *= width;
+      top *= height;
+      this.moveTo(this.state.selected, e.clientX-divLeft-left,e.clientY-divTop-top);
       return;
     }
-    if(this.state.showAddElement) {
-      this.setState({showAddElement:!this.state.showAddElement});
+    if(this.state.selectedElement !== null) {
+      this.addNew(e);
       return;
     }
-    this.setState({showAddElement:!this.state.showAddElement, clientX:e.clientX, clientY:e.clientY});
+    this.setState({
+      showAddElement:!this.state.showAddElement,
+      clientX:e.clientX,
+      clientY:e.clientY});
   }
-  handleSelect = (id) => {
+  handleRasiaClick = (e,id) => {
+    e.stopPropagation();
     if(id === this.state.selected) {
       this.setState({selected:null});
     } else {
       this.setState({selected:id});
     }
   }
-  handleAdd = (e) => {
+  handleElementSelect = (e) => {
     e.stopPropagation();
-    this.handleClick();
+    this.setState({selected:null});
+    if(this.state.selectedElement !== null) {
+      if(e.currentTarget.name === this.state.selectedElement) {
+        this.setState({selectedElement:null});
+        return;
+      }
+    }
+    this.setState({selectedElement:e.currentTarget.name});
+  }
+  handleModalToggle = (e) => {
+    e.stopPropagation();
+    this.setState({toggle:!this.state.toggle});
+  }
+  addNew = (e) => {
+    e.stopPropagation();
     var inouts = this.state.inouts.slice();
-    var {left,top} = this.div.getBoundingClientRect();
-    left = this.state.clientX - left;
-    top = this.state.clientY - top;
+    var {left,top,width,height} = this.div.getBoundingClientRect();
+    left = (e.clientX - left)/width;
+    top = (e.clientY - top)/height;
     inouts.push({
       id:id++,
       left:left,
       top:top,
-      type:e.currentTarget.name,
+      type:this.state.selectedElement,
       spec:{}
     });
-    this.setState({inouts});
+    this.setState({inouts,showAddElement:false});
   }
   handleDelete = (id) => {
     var inouts = this.state.inouts.filter( inout => inout.id !== id);
     this.setState({inouts,selected:null});
   }
-  moveTo(id, left, top)  {
-    var inouts = this.state.inouts.slice();
-    var idx = inouts.findIndex( inout => inout.id === id);
-    inouts[idx].left = left;
-    inouts[idx].top = top;
+  moveTo = (id, dx, dy) => {
+    let inouts = this.state.inouts.slice();
+    const idx = inouts.findIndex( inout => inout.id === id);
+    const {width,height} = this.div.getBoundingClientRect();
+    const {left,top} = inouts[idx];
+    inouts[idx].left = left+dx/width;
+    inouts[idx].top = top+dy/height;
     this.setState({inouts});
   }
+  handleSetupSubmit = ({id, formState}) => {
+    let inouts = this.state.inouts.slice();
+    const idx = inouts.findIndex( inout => inout.id === id);
+    inouts[idx].spec = formState;
+    this.setState({inouts});
+  }
+  upload() {
+    fetch('/upload', {
+      method:"post",
+      body:JSON.stringify(this.state),
+    }).then( (response) => {
+        console.log("response OK");
+    });
+    console.log("upload");
+  }
+  download() {
+    fetch('/download').then( (response) => {
+        response.json().then( (state) => {
+          this.setState(state);
+        });
+    });
+  }
+  handleUploadClick = (type) => {
+    if(type === 'upload') {
+      this.upload()
+    } else {
+      this.download();
+    }
+  }
   render() {
-    const {connectDropTarget} = this.props;
-    return (
-      connectDropTarget(
-        <div onClick={this.handleClick}>
-          <Col md={8} mdOffset={2}  style={style}>
-            <div ref={div => this.div=div} >
-              <img src={lavaPic} alt="Stage map" style={{opacity:0.5,width:"100%"}}/>
-              {this.state.inouts.map( r => (
-                <Rasia handleSelect={this.handleSelect} selected={this.state.selected === r.id} handleDelete={this.handleDelete} {...r} key={r.id}/>
-              ))}
-            </div>
-          </Col>
-          <AddElement handleClick={this.handleAdd} left={this.state.clientX} show={this.state.showAddElement} top={this.state.clientY}/>
-        </div>)
-    )
+    return <Lava {...this.state}
+      handleModalToggle={this.handleModalToggle}
+      moveTo={this.moveTo}
+      handleStageClick={this.handleStageClick}
+      setDiv={this.setDiv}
+      handleElementSelect={this.handleElementSelect}
+      handleRasiaClick={this.handleRasiaClick}
+      handleDelete={this.handleDelete}
+      handleUploadClick={this.handleUploadClick}
+      handleSetupSubmit={this.handleSetupSubmit} />
   }
 }
-export default DragDropContext(HTML5Backend)(DropTarget("RASIA", rasiaTarget, collect)(Lava));
+export default LavaContainer;

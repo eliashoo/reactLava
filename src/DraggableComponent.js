@@ -23,15 +23,18 @@ class DraggableComponent extends Component {
     const {left,top,connectDragSource} = this.props;
 
     var style = {
-      left:left+"px",
-      top:top+"px",
+      left:left*100+"%",
+      top:top*100+"%",
     }
 
     if(this.props.style) {
       Object.assign(style, this.props.style);
     }
     return (
-      connectDragSource(<div className="component" style={style} >{this.props.children}</div>)
+      connectDragSource(
+        <div className="component" style={style} >
+          {this.props.children}
+        </div>)
     );
   }
 }

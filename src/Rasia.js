@@ -9,15 +9,28 @@ import DraggableComponent from './DraggableComponent.js';
 class Rasia extends Component {
   constructor(props) {
     super(props);
-    this.state = {showModal:true,spec:this.props.spec,formState:{}}
+    this.state = {showModal:this.props.shoulOpenModal,spec:this.props.spec,formState:this.props.spec}
   }
   close = () => {
     this.setState({showModal:false});
   }
-  open = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  open = () => {
     this.setState({showModal:true});
+  }
+  handleEvent = (e) => {
+    e.stopPropagation();
+    switch(e.type) {
+      case "click":
+        this.props.handleRasiaClick(e,this.props.id);
+        break;
+      case "dblclick":
+      case "contextmenu":
+        this.open();
+        e.preventDefault();
+        break;
+      default:
+        break;
+    }
   }
   handleChange = (event) => {
     var target = event.target;
@@ -26,15 +39,8 @@ class Rasia extends Component {
     if(target.type === 'checkbox') {
       val = target.checked;
     }
-
-    this.setState( prevState => {
-      var formState = Object.assign({}, prevState.formState, {[target.name]:val} )
-      return {formState}
-    });
-  }
-  handleClick = (e) => {
-    this.props.handleSelect(this.props.id);
-    e.stopPropagation();
+    var formState = {...this.state.formState, [target.name]:val};
+    this.setState({formState});
   }
   handleDelete = () => {
     this.props.handleDelete(this.props.id);
@@ -43,12 +49,15 @@ class Rasia extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.close();
-    var spec = Object.assign({}, this.state.spec, this.state.formState);
-    this.setState({spec})
+    const {id} = this.props;
+    const {formState} = this.state;
+    this.props.handleSetupSubmit({id,formState});
+    //var spec = {...this.state.spec, ...this.state.formState};
+    //this.setState({spec})
   }
   render() {
-    const {type,id,left,top} = this.props;
-    const spec = this.state.spec;
+    const {type,id,left,top,spec} = this.props;
+    //const spec = this.state.spec;
 
     const components = {
       in: In,
@@ -64,27 +73,38 @@ class Rasia extends Component {
     const Comp = components[type];
     const Setup = setups[type];
     var style = {}
+
+    let dx = -0.015; // %-width and height of half of component
+    let dy = -0.028;
     if(this.props.selected) {
       style = {fontSize:"2em" }
+      dx *= 2;
+      dy *= 2;
     }
     return (
       <div>
-        <div onDoubleClick={this.open} onContextMenu={this.open} onClick={this.handleClick} >
-          <DraggableComponent  style={style} left={left} top={top} id={id}>
+        <div  onDoubleClick={this.handleEvent}
+              onContextMenu={this.handleEvent}
+              onClick={this.handleEvent} >
+          <DraggableComponent  style={style} left={left+dx} top={top+dy} id={id}>
             <Comp id={id} {...spec}/>
           </DraggableComponent>
         </div>
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit {name}</Modal.Title>
+            <Modal.Title>Edit {spec.name}</Modal.Title>
           </Modal.Header>
           <Form onSubmit={this.handleSubmit} action="#">
           <Modal.Body>
-            <Setup id={id} handleChange={this.handleChange} opts={spec} />
+            <Setup id={id} handleChange={this.handleChange}
+              {...this.state.formState} />
           </Modal.Body>
           <Modal.Footer>
             <Button type="submit" onSubmit={this.handleSubmit}>OK</Button>
-            <Button onClick={this.handleDelete}><Glyphicon glyph="remove" />Remove</Button>
+            <Button onClick={this.handleDelete}>
+              <Glyphicon glyph="remove" />
+              Remove
+            </Button>
           </Modal.Footer>
           </Form>
         </Modal>

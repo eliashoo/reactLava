@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Lava from './Lava.js';
+import LavaContainer from './LavaContainer.js';
 
 
 var INOUTS = [
@@ -22,7 +22,7 @@ class App extends Component {
         <div className="App-header">
           <h1>Stage Map</h1>
         </div>
-        <Lava inouts={INOUTS} />
+        <LavaContainer inouts={INOUTS} />
       </div>
     );
   }

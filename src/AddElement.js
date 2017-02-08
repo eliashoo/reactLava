@@ -7,10 +7,16 @@ function AddElement(props) {
   }
   const types = [["in","music"],["box","th"],["out","bullhorn"]];
   return (
-    <div style={{left:props.left,top:props.top,position:"absolute"}}>
+    <div className="add-element">
       <ButtonToolbar>
         {types.map(type =>
-        <Button bsSize="large" onClick={props.handleClick} name={type[0]}><Glyphicon glyph={type[1]} /></Button>
+        <Button key={type[0]}
+          bsSize="xs"
+          onClick={props.handleElementSelect}
+          active={type[0] === props.selectedElement}
+          name={type[0]}>
+            <Glyphicon glyph={type[1]} />
+        </Button>
       )}
       </ButtonToolbar>
     </div>

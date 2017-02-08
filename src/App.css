@@ -6,11 +6,7 @@
   background-color: #222;
   height: 100px;
   padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
+  color: #f55;
 }
 
 .component {
@@ -18,4 +14,69 @@
   position:absolute;
   font-size:1em;
   color:black;
+}
+
+.toggleSwitch {
+  width:20px;
+  height:14px;
+  background-color:#f55;
+  position:absolute;
+  top:1px;
+  border-radius:20px;
+  transition: left .2s ease-out;
+}
+
+.toOn {
+  left:29px;
+  background-color:#f99;
+}
+.toOff {
+  left:1px;
+}
+
+.modal-body .form-group {
+  overflow:hidden;
+}
+
+.side-bar {
+  padding-bottom:5px;
+  background-color:#f55;
+  border-radius:0 0 10px 10px;
+  overflow:hidden;
+}
+.toggle, .add-element, .upload {
+  border-style:solid;
+  border-color:#f55;
+  border-width:0 2px;
+  padding:5px;
+  height:56px;
+}
+.toggle {
+}
+.upload {
+  height:56px;
+  border-radius:0 0 10px 10px;
+  border-width:0 2px 2px 2px;
+}
+.add-element {
+  padding:5px;
+  border-width:0 2px;
+}
+.side-bar > div > div > div {
+  background-color:white;
+  margin:0 5px;
+  padding:5px;
+}
+@media (max-width: 900px) {
+  .toggle {
+    height:56px;
+    border-radius:0 0 10px 10px;
+    border-width:0 2px 2px 2px;
+  }
+  .add-element {
+    border-radius:0 0 10px 10px;
+    padding:5px;
+    border-width:0 2px 2px 2px;
+  }
+
 }

@@ -6,7 +6,12 @@ import FieldGroup from './FieldGroup.js';
 class In extends Component {
   render() {
     const {name,ch} = this.props;
-    return <Label bsStyle="danger"><Glyphicon glyph="music" /> {name} - {ch}</Label>;
+    return (
+      <Label bsStyle="danger">
+        <Glyphicon glyph="music" />
+        {name} - {ch}
+      </Label>
+    );
   }
 }
 class InSetup extends Component {
@@ -14,13 +19,18 @@ class InSetup extends Component {
     this.props.handleChange(event);
   }
   render() {
-    const {name,ch,di,phantom} = this.props.opts;
+    const {name,ch,di,phantom} = this.props;
     return (
       <div>
-        <FieldGroup id="nameText" autoFocus label="Name" type="text" onChange={this.handleChange} name="name" value={name} />
-        <FieldGroup id="chText" label="Ch" type="text" onChange={this.handleChange} name="ch" value={ch} />
-        <FieldGroup id="diCheck" label="DI" onChange={this.handleChange} name="di" defaultChecked={di} check/>
-        <FieldGroup id="pahtomCheck" label="Phantom" onChange={this.handleChange} name="phantom" defaultChecked={phantom} check/>
+        <FieldGroup id="nameText" autoFocus label="Name" type="text"
+          onChange={this.handleChange} name="name" value={name} />
+        <FieldGroup id="chText" label="Ch" type="text"
+          onChange={this.handleChange} name="ch" value={ch} />
+        <FieldGroup id="diCheck" label="DI" onChange={this.handleChange}
+          name="di" defaultChecked={di} check/>
+        <FieldGroup id="pahtomCheck" label="Phantom"
+          onChange={this.handleChange} name="phantom"
+          defaultChecked={phantom} check/>
       </div>
     )
   }
