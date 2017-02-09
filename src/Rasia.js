@@ -4,7 +4,7 @@ import Box,{BoxSetup} from './Box.js';
 import In,{InSetup} from './In.js';
 import Out,{OutSetup} from './Out.js';
 import DraggableComponent from './DraggableComponent.js';
-
+import ModalForm from './ModalForm.js';
 
 class Rasia extends Component {
   constructor(props) {
@@ -32,28 +32,9 @@ class Rasia extends Component {
         break;
     }
   }
-  handleChange = (event) => {
-    var target = event.target;
-    var val = target.value;
-
-    if(target.type === 'checkbox') {
-      val = target.checked;
-    }
-    var formState = {...this.state.formState, [target.name]:val};
-    this.setState({formState});
-  }
   handleDelete = () => {
     this.props.handleDelete(this.props.id);
     this.close();
-  }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.close();
-    const {id} = this.props;
-    const {formState} = this.state;
-    this.props.handleSetupSubmit({id,formState});
-    //var spec = {...this.state.spec, ...this.state.formState};
-    //this.setState({spec})
   }
   render() {
     const {type,id,left,top,spec} = this.props;
@@ -100,24 +81,10 @@ class Rasia extends Component {
             <Glyphicon glyph={types[type]}/>{spec.name}
             {/* <Comp id={id} {...spec}/> */}
           </DraggableComponent>
-        <Modal show={this.state.showModal} onHide={this.close}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit {spec.name}</Modal.Title>
-          </Modal.Header>
-          <Form onSubmit={this.handleSubmit} action="#">
-          <Modal.Body>
-            <Setup id={id} handleChange={this.handleChange}
-              {...this.state.formState} />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="submit" onSubmit={this.handleSubmit}>OK</Button>
-            <Button onClick={this.handleDelete}>
-              <Glyphicon glyph="remove" />
-              Remove
-            </Button>
-          </Modal.Footer>
-          </Form>
-        </Modal>
+          {this.state.showModal &&
+            <ModalForm {...this.props} showModal={this.state.showModal} close={this.close}/>
+          }
+
       </div>
     );
   }

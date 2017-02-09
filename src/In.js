@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Glyphicon, Label } from 'react-bootstrap';
+import Elements from './Elements.js';
 
 import FieldGroup from './FieldGroup.js';
 
@@ -19,18 +20,14 @@ class InSetup extends Component {
     this.props.handleChange(event);
   }
   render() {
+    const fields = Elements["in"].fields;
     const {name,ch,di,phantom} = this.props;
     return (
       <div>
-        <FieldGroup id="nameText" autoFocus label="Name" type="text"
-          onChange={this.handleChange} name="name" value={name} />
-        <FieldGroup id="chText" label="Ch" type="text"
-          onChange={this.handleChange} name="ch" value={ch} />
-        <FieldGroup id="diCheck" label="DI" onChange={this.handleChange}
-          name="di" defaultChecked={di} check/>
-        <FieldGroup id="pahtomCheck" label="Phantom"
-          onChange={this.handleChange} name="phantom"
-          defaultChecked={phantom} check/>
+        {fields.map( (field) => (
+          <FieldGroup horizontal={this.props.horizontal} key={field.name} id='${field.name}Text' label={field.name} type={field.type}
+            onChange={this.handleChange} name={field.name} value={this.props[field.name]} />
+        ))}
       </div>
     )
   }

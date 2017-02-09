@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Lava from './Lava.js';
+import Elements from './Elements.js';
 
 var id = 0;
 class LavaContainer extends Component {
@@ -73,13 +74,19 @@ class LavaContainer extends Component {
   }
   addNew = (e) => {
     e.stopPropagation();
+    const type = this.state.selectedElement;
+
+    // Transform fields to spec
+    const spec = Elements[type].fields.map( ({name}) => name )
+      .reduce( (acc, cur, i ) => { acc[cur] = ''; return acc;}, {});
+
     const inouts = this.state.inouts.concat(
     {
       id:id,
       left:0, //Set at moveTo
       top:0,
-      type:this.state.selectedElement,
-      spec:{}
+      type:type,
+      spec:spec
     });
     let {clientX:x,clientY:y} = e;
     // Offset by width and height of new element
@@ -94,7 +101,7 @@ class LavaContainer extends Component {
   moveTo = (id, x, y, newState) => {
     let inouts = newState ? newState : this.state.inouts.slice();
 
-    let state = inouts[inouts.findIndex( inout => inout.id === id)];
+    let state = inouts.find( inout => inout.id === id);
 
     const {left,top} = this.viewportToDiv(x, y);
 
@@ -135,6 +142,7 @@ class LavaContainer extends Component {
     }
   }
   componentDidMount() {
+    //this.download();
     window.addEventListener("resize", () => {
       this.forceUpdate();
     });

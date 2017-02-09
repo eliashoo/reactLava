@@ -15,9 +15,6 @@ function collect(connect, monitor) {
 }
 
 class DraggableComponent extends Component {
-  componentDidMount() {
-    console.log("mount");
-  }
   render() {
     if(this.props.isDragging) {
       return null;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Glyphicon, Label } from 'react-bootstrap';
+import Elements from './Elements.js';
 
 import FieldGroup from './FieldGroup.js';
 
@@ -19,13 +20,14 @@ class OutSetup extends Component {
     this.props.handleChange(event);
   }
   render() {
-    const {name,ch} = this.props;
+    const fields = Elements["out"].fields;
+    const {name,ch,di,phantom} = this.props;
     return (
       <div>
-      <FieldGroup id="nameText" autoFocus label="Name"
-        onChange={this.handleChange} value={name} name="name"/>
-      <FieldGroup id="chText" label="Ch"
-        onChange={this.handleChange} value={ch} name="ch"/>
+        {fields.map( (field) => (
+          <FieldGroup horizontal={this.props.horizontal} key={field.name} id='${field.name}Text' label={field.name} type={field.type}
+            onChange={this.handleChange} name={field.name} value={this.props[field.name]} />
+        ))}
       </div>
     )
   }
