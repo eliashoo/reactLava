@@ -77,8 +77,11 @@ class LavaContainer extends Component {
     const type = this.state.selectedElement;
 
     // Transform fields to spec
-    const spec = Elements[type].fields.map( ({name}) => name )
-      .reduce( (acc, cur, i ) => { acc[cur] = ''; return acc;}, {});
+    const spec = Elements[type].fields.reduce( (acc, cur, i) => {
+      let {name,type} = cur;
+      acc[name] = type === 'checkbox' ? false : '';
+      return acc;
+    },{});
 
     const inouts = this.state.inouts.concat(
     {
@@ -116,22 +119,36 @@ class LavaContainer extends Component {
     let inouts = this.state.inouts.slice();
     const idx = inouts.findIndex( inout => inout.id === id);
     inouts[idx].spec = formState;
-    this.setState({inouts});
+    this.setState({inouts,selected:null});
   }
   upload() {
+    const stateString = JSON.stringify(this.state);
     fetch('/upload', {
       method:"post",
-      body:JSON.stringify(this.state),
+      body:stateString
     }).then( (response) => {
         console.log("response OK");
+        if(response.code !== 200) {
+          window.alert("Upload failed. Saved to localStorage");
+          window.localStorage.setItem('state', JSON.stringify(this.state));
+        }
     });
     console.log("upload");
   }
   download() {
     fetch('/download').then( (response) => {
-        response.json().then( (state) => {
-          this.setState(state);
-        });
+      let state = null;
+      if(response.code === 200) {
+        state = response.text().then( (state) => state);
+      } else {
+        alert("Download failed. Loaded from localStorage");
+        state = window.localStorage.getItem('state')
+      }
+      if(state) {
+        state = JSON.parse(state);
+        state = {...state, selected:null, selectedElement:null}
+        this.setState(state);
+      }
     });
   }
   handleUploadClick = (type) => {
@@ -153,6 +170,7 @@ class LavaContainer extends Component {
   render() {
     let inouts = this.state.inouts.map(this.mapPctToDivCoordinates)
     return <Lava
+      toggle={this.state.toggle}
       inouts={inouts}
       selected={this.state.selected}
       selectedElement={this.state.selectedElement}

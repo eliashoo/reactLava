@@ -20,6 +20,10 @@
   text-overflow:ellipsis;
 }
 
+.side-bar .footer .btn + .btn{
+  margin-left:5px;
+}
+
 .comp-in {
   background-color: #f55;
 }

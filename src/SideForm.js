@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 
-import {Glyphicon,Button,Form,FormGroup} from 'react-bootstrap';
+import {Glyphicon,Button,Form,FormGroup,ButtonGroup,ButtonToolbar} from 'react-bootstrap';
 
 import {BoxSetup} from './Box.js';
 import {InSetup} from './In.js';
@@ -46,13 +46,13 @@ class SideForm extends Component {
     return (
       <Form onSubmit={this.handleSubmit} action="#">
         <Setup {...this.state.formState} handleChange={this.handleChange}/>
-        <FormGroup id="submit">
-          <Button type="submit">OK</Button>
-          <Button onClick={this.handleDelete}>
-            <Glyphicon glyph="remove" />
-            Remove
-          </Button>
-        </FormGroup>
+        <FormGroup id="submit" className="footer">
+            <Button type="submit">OK</Button>
+            <Button onClick={this.handleDelete}>
+              <Glyphicon glyph="trash" />
+              Remove
+            </Button>
+          </FormGroup>
       </Form>
     )
   }

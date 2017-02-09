@@ -56,7 +56,7 @@ class ModalForm extends Component {
         <Modal.Footer>
           <Button type="submit">OK</Button>
           <Button onClick={this.handleDelete}>
-            <Glyphicon glyph="remove" />
+            <Glyphicon glyph="trash" />
             Remove
           </Button>
         </Modal.Footer>

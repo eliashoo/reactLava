@@ -68,9 +68,8 @@ class Rasia extends Component {
     }
     if(this.props.selected) {
       style = {
-        fontSize:"2em",
-        marginLeft:"-16px",
-        marginTop:"-22px"}
+        border:"2px dashed black"
+      }
     }
     let className= `comp-${type}`;
     return (
