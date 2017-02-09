@@ -1,25 +1,24 @@
 import React from 'react';
-import {ButtonToolbar, Button, Glyphicon} from 'react-bootstrap';
+import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap';
 
 function AddElement(props) {
   if(!props.show) {
     return null;
   }
-  const types = [["in","music"],["box","th"],["out","bullhorn"]];
+  const types = [["in","music","Instrument"],["box","th","Stage box"],["out","bullhorn","monitor"]];
   return (
-    <div className="add-element">
-      <ButtonToolbar>
+      <ButtonGroup>
         {types.map(type =>
         <Button key={type[0]}
-          bsSize="xs"
+          bsSize="lg"
+          title={type[2]}
           onClick={props.handleElementSelect}
           active={type[0] === props.selectedElement}
           name={type[0]}>
             <Glyphicon glyph={type[1]} />
         </Button>
       )}
-      </ButtonToolbar>
-    </div>
+    </ButtonGroup>
   )
 }
 

@@ -15,6 +15,9 @@ function collect(connect, monitor) {
 }
 
 class DraggableComponent extends Component {
+  componentDidMount() {
+    console.log("mount");
+  }
   render() {
     if(this.props.isDragging) {
       return null;
@@ -23,8 +26,8 @@ class DraggableComponent extends Component {
     const {left,top,connectDragSource,className} = this.props;
 
     var style = {
-      left:left*100+"%",
-      top:top*100+"%",
+      left:left+"px",
+      top:top+"px",
     }
 
     if(this.props.style) {

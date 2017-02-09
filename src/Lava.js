@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import lavaPic from './lava2.jpg';
 import Rasia from './Rasia.js';
-import {Col,Grid,Row,Glyphicon,Button} from 'react-bootstrap';
+import {Col,Grid,Row,Glyphicon,Button,ButtonGroup,Label} from 'react-bootstrap';
 import AddElement from './AddElement.js';
 import Toggle from './Toggle.js'
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -10,9 +10,11 @@ import { DropTarget } from 'react-dnd';
 
 const rasiaTarget = {
   drop(props, monitor, component) {
-    const delta = monitor.getDifferenceFromInitialOffset();
+    // x,y in viewport coordinates
+    const {x:diffX,y:diffY} = monitor.getDifferenceFromInitialOffset()
+    const {x,y} = monitor.getInitialSourceClientOffset();
     const {id} = monitor.getItem();
-    props.moveTo(id,delta.x, delta.y);
+    props.moveTo(id,x+diffX,y+diffY);
   }
 };
 
@@ -22,10 +24,6 @@ function collect(connect, monitor) {
   };
 }
 
-
-const style = {
-  marginTop:"3em"
-}
 class Lava extends Component {
 
   handleStageClick = (e) => {
@@ -56,7 +54,7 @@ class Lava extends Component {
         <div onClick={this.handleStageClick}>
           <Grid>
             <Row>
-              <Col md={2}>
+              <Col className="side-bar" md={2}>
                   <Row>
                     <Col xs={4} md={12}>
                       <AddElement handleElementSelect={this.handleElementSelect}
@@ -71,19 +69,22 @@ class Lava extends Component {
                               onToggle={this.handleModalToggle}/>
                     </Col>
                     <Col xs={4} md={12}>
-                      <div className="upload">
-                        <Button bsSize="xs" onClick={() => this.props.handleUploadClick('upload')}>
-                          <Glyphicon glyph="upload"/>
-                        </Button>
-                        <Button bsSize="xs" onClick={() => this.props.handleUploadClick('download')}>
-                          <Glyphicon glyph="download"/>
-                        </Button>
-                      </div>
+                        <ButtonGroup>
+                          <Button title="Upload config" bsSize="lg" onClick={() => this.props.handleUploadClick('upload')}>
+                            <Glyphicon glyph="upload"/>
+                          </Button>
+                          <Button title="Download config" bsSize="lg" onClick={() => this.props.handleUploadClick('download')}>
+                            <Glyphicon glyph="download"/>
+                          </Button>
+                      </ButtonGroup>
+                    </Col>
+                    <Col xsHidden>
+                      <Label>{this.props.selected}</Label>
                     </Col>
                   </Row>
               </Col>
-              <Col md={10} style={style}>
-                <div ref={div => this.props.setDiv(div) } >
+              <Col md={10}>
+                <div style={{position:"relative"}} ref={div => this.props.setDiv(div) } >
                   <img  src={lavaPic} alt="Stage map"
                         style={{opacity:0.5,width:"100%"}}/>
                   {this.props.inouts.map( ({id, ...r}) => (

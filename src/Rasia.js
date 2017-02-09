@@ -79,20 +79,24 @@ class Rasia extends Component {
     const Comp = components[type];
     const Setup = setups[type];
 
-    let dx = -0.015; // %-width and height of half of component
-    let dy = -0.028;
-    let style = {}
+    let dx = 0;//"-15px";
+    let dy = 0;//"-12px";
+    let style = {
+      marginLeft:dx,
+      marginTop:dy
+    }
     if(this.props.selected) {
-      style = {fontSize:"2em" }
-      dx *= 2;
-      dy *= 2;
+      style = {
+        fontSize:"2em",
+        marginLeft:"-16px",
+        marginTop:"-22px"}
     }
     let className= `comp-${type}`;
     return (
       <div onDoubleClick={this.handleEvent}
             onContextMenu={this.handleEvent}
             onClick={this.handleEvent}>
-          <DraggableComponent  className={className} style={style} left={left+dx} top={top+dy} id={id}>
+          <DraggableComponent  className={className} style={style} left={left} top={top} id={id}>
             <Glyphicon glyph={types[type]}/>{spec.name}
             {/* <Comp id={id} {...spec}/> */}
           </DraggableComponent>

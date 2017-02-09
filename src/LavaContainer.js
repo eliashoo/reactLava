@@ -22,14 +22,7 @@ class LavaContainer extends Component {
   }
   handleStageClick = (e) => {
     if(this.state.selected !== null) {
-      var {width,height} = this.div.getBoundingClientRect();
-      const divLeft = this.div.getBoundingClientRect().left;
-      const divTop = this.div.getBoundingClientRect().top;
-      const idx = this.state.inouts.findIndex( inout => inout.id === this.state.selected);
-      let {left,top} = this.state.inouts[idx];
-      left *= width;
-      top *= height;
-      this.moveTo(this.state.selected, e.clientX-divLeft-left,e.clientY-divTop-top);
+      this.moveTo(this.state.selected, e.clientX,e.clientY);
       return;
     }
     if(this.state.selectedElement !== null) {
@@ -64,32 +57,52 @@ class LavaContainer extends Component {
     e.stopPropagation();
     this.setState({toggle:!this.state.toggle});
   }
+  viewportToDiv(x,y) {
+    var {left:divLeft,top:divTop} = this.div.getBoundingClientRect();
+    const left = (x - divLeft);
+    const top = (y - divTop);
+    return {left,top}
+  }
+  divToPct(x,y) {
+    var {width,height} = this.div.getBoundingClientRect();
+    return {left:x/width,top:y/height}
+  }
+  pctToDiv(x,y) {
+    var {width,height} = this.div.getBoundingClientRect();
+    return {left:x*width,top:y*height}
+  }
   addNew = (e) => {
     e.stopPropagation();
-    var inouts = this.state.inouts.slice();
-    var {left,top,width,height} = this.div.getBoundingClientRect();
-    left = (e.clientX - left)/width;
-    top = (e.clientY - top)/height;
-    inouts.push({
-      id:id++,
-      left:left,
-      top:top,
+    const inouts = this.state.inouts.concat(
+    {
+      id:id,
+      left:0, //Set at moveTo
+      top:0,
       type:this.state.selectedElement,
       spec:{}
     });
-    this.setState({inouts,showAddElement:false});
+    let {clientX:x,clientY:y} = e;
+    // Offset by width and height of new element
+    this.moveTo(id, x-15, y-12, inouts);
+    ++id;
   }
   handleDelete = (id) => {
     var inouts = this.state.inouts.filter( inout => inout.id !== id);
     this.setState({inouts,selected:null});
   }
-  moveTo = (id, dx, dy) => {
-    let inouts = this.state.inouts.slice();
-    const idx = inouts.findIndex( inout => inout.id === id);
-    const {width,height} = this.div.getBoundingClientRect();
-    const {left,top} = inouts[idx];
-    inouts[idx].left = left+dx/width;
-    inouts[idx].top = top+dy/height;
+  // x, y in viewport coordinates
+  moveTo = (id, x, y, newState) => {
+    let inouts = newState ? newState : this.state.inouts.slice();
+
+    let state = inouts[inouts.findIndex( inout => inout.id === id)];
+
+    const {left,top} = this.viewportToDiv(x, y);
+
+    const posPct = this.divToPct(left,top);
+
+    state.left = posPct.left;
+    state.top = posPct.top;
+
     this.setState({inouts});
   }
   handleSetupSubmit = ({id, formState}) => {
@@ -121,8 +134,20 @@ class LavaContainer extends Component {
       this.download();
     }
   }
+  componentDidMount() {
+    window.addEventListener("resize", () => {
+      this.forceUpdate();
+    });
+  }
+  mapPctToDivCoordinates = (inout) => {
+    return {...inout,...this.pctToDiv(inout.left,inout.top)}
+  }
   render() {
-    return <Lava {...this.state}
+    let inouts = this.state.inouts.map(this.mapPctToDivCoordinates)
+    return <Lava
+      inouts={inouts}
+      selected={this.state.selected}
+      selectedElement={this.state.selectedElement}
       handleModalToggle={this.handleModalToggle}
       moveTo={this.moveTo}
       handleStageClick={this.handleStageClick}
