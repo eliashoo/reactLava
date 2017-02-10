@@ -1,3 +1,31 @@
+# Stage map
+
+This is an app made for my personal usage. It is used to design stage and keep track of stage's monitors and instruments. It may not be useful to others nor myself; I have not tried it yet in live situation.
+
+## Instructions
+
+Select element from toolbar and click on map to add it. You can control setup modal opening by toggling the switch. By default you can add element after another without configuring element first.
+
+Element can be selected by clicking it and another click on stage moves it there. On desktop, elements can also be dragged with mouse.
+
+Elements are color coded and also marked with symbols
+
+| Color | Symbol | Meaning |
+| --- | --- | --- |
+| Green | Bullhorn | Monitor |
+| Red | Note | Input |
+| Blue | Grid | Stage box |
+
+Element can be configured with doubleclick or right click. Config options are specific for each element
+
+### Todo
+
+- Add Redux 
+- Add backed
+- Add maybe some colorcoding to visualize connections
+
+## Other info
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
