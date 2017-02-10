@@ -2,14 +2,12 @@ import React,{Component} from 'react';
 
 import {Glyphicon,Button,Form,Modal} from 'react-bootstrap';
 
-import {BoxSetup} from './Box.js';
-import {InSetup} from './In.js';
-import {OutSetup} from './Out.js';
+import ElementSetup from './ElementSetup';
 
 class ModalForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {formState:props.spec}
+    this.state = {formState:props.inout.spec}
   }
   handleChange = (event) => {
     var target = event.target;
@@ -24,34 +22,27 @@ class ModalForm extends Component {
   handleSubmit = (e) => {
     this.props.close();
     e.preventDefault();
-    e.stopPropagation();
     const id = this.props.id;
     const {formState} = this.state;
-    this.props.handleSetupSubmit({id,formState});
+    this.props.formHandlers.submit({id,formState});
   }
   handleDelete = (e) => {
     this.props.close();
-    this.props.handleDelete(this.props.id);
+    this.props.formHandlers.delete(this.props.id);
   }
   render() {
-    const setups = {
-      in: InSetup,
-      out: OutSetup,
-      box: BoxSetup
-    }
-    let {type} = this.props;
-
-    let Setup = setups[type];
+    const {inout} = this.props;
+    const {type} = inout;
 
     return (
       <Modal show={this.props.showModal} onHide={this.props.close}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit {this.props.spec.name}</Modal.Title>
+          <Modal.Title>Edit {inout.spec.name}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={this.handleSubmit} action="#">
         <Modal.Body>
-          <Setup horizontal id={this.props.id} handleChange={this.handleChange}
-            {...this.state.formState} />
+          <ElementSetup horizontal type={type} handleChange={this.handleChange}
+            spec={this.state.formState} />
         </Modal.Body>
         <Modal.Footer>
           <Button type="submit">OK</Button>

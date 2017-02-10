@@ -22,8 +22,10 @@ class LavaContainer extends Component {
     this.div = div;
   }
   handleStageClick = (e) => {
+    e.stopPropagation();
+
     if(this.state.selected !== null) {
-      this.moveTo(this.state.selected, e.clientX,e.clientY);
+      this.moveTo(this.state.selected, e.clientX-15,e.clientY-12);
       return;
     }
     if(this.state.selectedElement !== null) {
@@ -35,13 +37,13 @@ class LavaContainer extends Component {
       clientX:e.clientX,
       clientY:e.clientY});
   }
-  handleRasiaClick = (e,id) => {
-    e.stopPropagation();
+  handleRasiaClick = (id) => {
     if(id === this.state.selected) {
       this.setState({selected:null});
     } else {
       this.setState({selected:id});
     }
+    this.setState({selectedElement:null});
   }
   handleElementSelect = (e) => {
     e.stopPropagation();
@@ -96,10 +98,6 @@ class LavaContainer extends Component {
     this.moveTo(id, x-15, y-12, inouts);
     ++id;
   }
-  handleDelete = (id) => {
-    var inouts = this.state.inouts.filter( inout => inout.id !== id);
-    this.setState({inouts,selected:null});
-  }
   // x, y in viewport coordinates
   moveTo = (id, x, y, newState) => {
     let inouts = newState ? newState : this.state.inouts.slice();
@@ -115,7 +113,12 @@ class LavaContainer extends Component {
 
     this.setState({inouts});
   }
+  handleDelete = (id) => {
+    var inouts = this.state.inouts.filter( inout => inout.id !== id);
+    this.setState({inouts,selected:null});
+  }
   handleSetupSubmit = ({id, formState}) => {
+    console.log("submit");
     let inouts = this.state.inouts.slice();
     const idx = inouts.findIndex( inout => inout.id === id);
     inouts[idx].spec = formState;
@@ -158,31 +161,44 @@ class LavaContainer extends Component {
       this.download();
     }
   }
-  componentDidMount() {
+  forceResizeUpdate = () => {
+    this.forceUpdate();
+  }
+  componentWillMount() {
     //this.download();
-    window.addEventListener("resize", () => {
-      this.forceUpdate();
-    });
+    window.addEventListener("resize", this.forceResizeUpdate);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize",this.forceResizeUpdate);
   }
   mapPctToDivCoordinates = (inout) => {
     return {...inout,...this.pctToDiv(inout.left,inout.top)}
   }
   render() {
+    const formHandlers = {
+      submit:this.handleSetupSubmit,
+      delete:this.handleDelete
+    }
+    const stageHandlers = {
+      moveTo:this.moveTo,
+      handleStageClick:this.handleStageClick,
+      setDiv:this.setDiv,
+      handleRasiaClick:this.handleRasiaClick
+    }
+    const addElementProps = {
+      handleElementSelect:this.handleElementSelect,
+      selectedElement:this.state.selectedElement
+    }
     let inouts = this.state.inouts.map(this.mapPctToDivCoordinates)
     return <Lava
       toggle={this.state.toggle}
       inouts={inouts}
       selected={this.state.selected}
-      selectedElement={this.state.selectedElement}
       handleModalToggle={this.handleModalToggle}
-      moveTo={this.moveTo}
-      handleStageClick={this.handleStageClick}
-      setDiv={this.setDiv}
-      handleElementSelect={this.handleElementSelect}
-      handleRasiaClick={this.handleRasiaClick}
-      handleDelete={this.handleDelete}
-      handleUploadClick={this.handleUploadClick}
-      handleSetupSubmit={this.handleSetupSubmit} />
+      stageHandlers={stageHandlers}
+      addElementProps={addElementProps}
+      formHandlers={formHandlers}
+      handleUploadClick={this.handleUploadClick}/>
   }
 }
 export default LavaContainer;

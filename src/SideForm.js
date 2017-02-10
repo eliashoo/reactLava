@@ -1,15 +1,13 @@
 import React,{Component} from 'react';
 
-import {Glyphicon,Button,Form,FormGroup,ButtonGroup,ButtonToolbar} from 'react-bootstrap';
+import {Glyphicon,Button,Form,FormGroup} from 'react-bootstrap';
 
-import {BoxSetup} from './Box.js';
-import {InSetup} from './In.js';
-import {OutSetup} from './Out.js';
+import ElementSetup from './ElementSetup';
 
 class SideForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {formState:props.spec}
+    this.state = {formState:props.inout && props.inout.spec}
   }
   handleChange = (event) => {
     var target = event.target;
@@ -22,30 +20,26 @@ class SideForm extends Component {
     this.setState({formState});
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({formState:nextProps.spec});
+
+    this.setState({formState:nextProps.inout && nextProps.inout.spec});
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    const id = this.props.id;
+
+    const id = this.props.inout.id;
     const {formState} = this.state;
-    this.props.onSubmit({id,formState});
+    this.props.formHandlers.submit({id,formState});
   }
   handleDelete = (e) => {
-    this.props.handleDelete(this.props.id);
+    this.props.formHandlers.delete(this.props.inout.id);
   }
   render() {
-    const setups = {
-      in: InSetup,
-      out: OutSetup,
-      box: BoxSetup
-    }
-    let {type} = this.props;
+    let {inout} = this.props;
+    let {type} = inout;
 
-    let Setup = setups[type];
     return (
       <Form onSubmit={this.handleSubmit} action="#">
-        <Setup {...this.state.formState} handleChange={this.handleChange}/>
+        <ElementSetup type={type} spec={this.state.formState} handleChange={this.handleChange}/>
         <FormGroup id="submit" className="footer">
             <Button type="submit">OK</Button>
             <Button onClick={this.handleDelete}>

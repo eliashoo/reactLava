@@ -20,7 +20,7 @@ class DraggableComponent extends Component {
       return null;
     }
 
-    const {left,top,connectDragSource,className} = this.props;
+    const {left,top,connectDragSource} = this.props;
 
     var style = {
       left:left+"px",
