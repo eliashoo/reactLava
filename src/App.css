@@ -90,6 +90,18 @@
   /*padding:5px;
   border-width:0 2px;*/
 }
+.check-checked.checkbox {
+  display:inline-block;
+}
+.remove-check {
+  float:right;
+}
+.check-group.form-group {
+  margin-bottom:0;
+}
+.check-list {
+  padding-left:5px;
+}
 
 @media (max-width: 900px) {
   .toggle {
