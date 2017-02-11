@@ -6,7 +6,11 @@ let checks = 0;
 class Checklist extends Component {
   constructor(props) {
     super(props);
+    let state = window.localStorage.getItem('checklist');
     this.state = { newTodo:'',showModal: false,checks:[] };
+    if(state) {
+      this.state = JSON.parse(state);
+    }
   }
   addTodo = (value) => {
     let todos = this.state.checks.concat({name:value,checked:false,id:checks++});
@@ -34,10 +38,14 @@ class Checklist extends Component {
     checks = checks.filter( ({id}) => id !== checkId);
     this.setState({checks:checks});
   }
+  handleCloseChecklist = () => {
+    window.localStorage.setItem('checklist', JSON.stringify(this.state));
+    this.props.closeChecklist();
+  }
   render() {
     return (
       <div>
-        <Modal show={this.props.show} onHide={this.props.closeChecklist}>
+        <Modal show={this.props.show} onHide={this.handleCloseChecklist}>
           <Modal.Header closeButton>
             <Modal.Title>Checklist</Modal.Title>
           </Modal.Header>
