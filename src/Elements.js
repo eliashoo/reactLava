@@ -7,7 +7,7 @@ const Elements = {
       {name:"ch",type:"text"},
       {name:"di",type:"checkbox"},
       {name:"phantom",type:"checkbox"}]
-    },
+  },
   out:{
     glyph:"bullhorn",
     title:"Monitor",
@@ -19,8 +19,8 @@ const Elements = {
     glyph:"th",
     title:"Stage box",
     fields:[
-      {name:"name",type:"text"},
-      {name:"channels",type:"text"}],
+      {name:"channels in",type:"text"},
+      {name:"channels out",type:"text"}],
   }
 }
 export default Elements;

@@ -3,6 +3,7 @@ import {Glyphicon} from 'react-bootstrap';
 import DraggableComponent from './DraggableComponent.js';
 import ModalForm from './ModalForm.js';
 import Elements from './Elements';
+import ElementComponents from './ElementComponents';
 
 class Rasia extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class Rasia extends Component {
         border:"2px dashed black"
       }
     }
+    let Comp = ElementComponents[type];
 
     let className= `comp-${type}`;
     return (
@@ -51,7 +53,7 @@ class Rasia extends Component {
             onContextMenu={this.handleEvent}
             onClick={this.handleEvent}>
           <DraggableComponent  className={className} style={style} left={left} top={top} id={id}>
-            <Glyphicon glyph={Elements[type].glyph}/>{spec.name}
+            <Glyphicon glyph={Elements[type].glyph}/><Comp {...spec}/>
           </DraggableComponent>
           {this.state.showModal &&
             <ModalForm id={id} inout={inout} formHandlers={formHandlers} showModal={this.state.showModal} close={this.close}/>
