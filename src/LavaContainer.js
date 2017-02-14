@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Lava from './Lava.js';
-import Elements from './Elements.js';
+import {fieldsToSpec} from './Elements.js';
 
 var id = 0;
 class LavaContainer extends Component {
@@ -10,32 +10,28 @@ class LavaContainer extends Component {
     this.state = {
       inouts:[],
       show:false,
-      clientX:0,
-      clientY:0,
       selected:null,
-      showAddElement:false,
       selectedElement:null,
-      toggle:false
+      toggle:false,
+      visibilityFilter:'all',
+      stage:{
+        width:0,
+        height:0,
+        left:0,
+        top:0
+      }
     };
   }
-  setDiv = (div) => {
-    this.div = div;
-  }
-  handleStageClick = (e) => {
-    e.stopPropagation();
-
+  handleStageClick = ({left,top}) => {
+    console.log(left,top);
     if(this.state.selected !== null) {
-      this.moveTo(this.state.selected, e.clientX-15,e.clientY-12);
+      this.moveTo(this.state.selected, left,top);
       return;
     }
     if(this.state.selectedElement !== null) {
-      this.addNew(e);
+      this.addNew(left,top);
       return;
     }
-    this.setState({
-      showAddElement:!this.state.showAddElement,
-      clientX:e.clientX,
-      clientY:e.clientY});
   }
   handleRasiaClick = (id) => {
     if(id === this.state.selected) {
@@ -60,59 +56,6 @@ class LavaContainer extends Component {
     e.stopPropagation();
     this.setState({toggle:!this.state.toggle});
   }
-  viewportToDiv(x,y) {
-    var {left:divLeft,top:divTop} = this.div.getBoundingClientRect();
-    const left = (x - divLeft);
-    const top = (y - divTop);
-    return {left,top}
-  }
-  divToPct(x,y) {
-    var {width,height} = this.div.getBoundingClientRect();
-    return {left:x/width,top:y/height}
-  }
-  pctToDiv(x,y) {
-    var {width,height} = this.div.getBoundingClientRect();
-    return {left:x*width,top:y*height}
-  }
-  addNew = (e) => {
-    e.stopPropagation();
-    const type = this.state.selectedElement;
-
-    // Transform fields to spec
-    const spec = Elements[type].fields.reduce( (acc, cur, i) => {
-      let {name,type} = cur;
-      acc[name] = type === 'checkbox' ? false : '';
-      return acc;
-    },{});
-
-    const inouts = this.state.inouts.concat(
-    {
-      id:id,
-      left:0, //Set at moveTo
-      top:0,
-      type:type,
-      spec:spec
-    });
-    let {clientX:x,clientY:y} = e;
-    // Offset by width and height of new element
-    this.moveTo(id, x-15, y-12, inouts);
-    ++id;
-  }
-  // x, y in viewport coordinates
-  moveTo = (id, x, y, newState) => {
-    let inouts = newState ? newState : this.state.inouts.slice();
-
-    let state = inouts.find( inout => inout.id === id);
-
-    const {left,top} = this.viewportToDiv(x, y);
-
-    const posPct = this.divToPct(left,top);
-
-    state.left = posPct.left;
-    state.top = posPct.top;
-
-    this.setState({inouts});
-  }
   handleDelete = (id) => {
     var inouts = this.state.inouts.filter( inout => inout.id !== id);
     this.setState({inouts,selected:null});
@@ -120,9 +63,48 @@ class LavaContainer extends Component {
   handleSetupSubmit = ({id, formState}) => {
     console.log("submit");
     let inouts = this.state.inouts.slice();
-    const idx = inouts.findIndex( inout => inout.id === id);
-    inouts[idx].spec = formState;
+    let  inout = inouts.find( inout => inout.id === id);
+    inout.spec = formState;
     this.setState({inouts,selected:null});
+  }
+  handleVisibilityFilterChange = (e) => {
+    this.setState({visibilityFilter:e.target.name});
+  }
+  handleUploadClick = (type) => {
+    type === 'upload' ? this.upload() : this.download();
+  }
+  handleForceUpdate = () => {
+    this.forceUpdate();
+  }
+  handleStageChange = ({left,top,width,height}) => {
+    this.setState({stage:{left,top,width,height}});
+  }
+  addNew = (x,y) => {
+    const type = this.state.selectedElement;
+
+    // Transform fields to spec
+    const spec = fieldsToSpec(type);
+
+    const inouts = this.state.inouts.concat(
+    {
+      id:id,
+      left:0, //To be set at moveTo
+      top:0,
+      type:type,
+      spec:spec
+    });
+    this.moveTo(id, x, y, inouts);
+    ++id;
+  }
+  moveTo = (id, x, y, newState) => {
+    let inouts = newState ? newState : this.state.inouts.slice();
+
+    let state = inouts.find( inout => inout.id === id);
+
+    state.left = x;
+    state.top = y;
+
+    this.setState({inouts});
   }
   upload() {
     const stateString = JSON.stringify(this.state);
@@ -154,48 +136,36 @@ class LavaContainer extends Component {
       }
     });
   }
-  handleUploadClick = (type) => {
-    if(type === 'upload') {
-      this.upload()
-    } else {
-      this.download();
-    }
-  }
-  forceResizeUpdate = () => {
-    this.forceUpdate();
-  }
-  componentWillMount() {
-    //this.download();
-    window.addEventListener("resize", this.forceResizeUpdate);
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize",this.forceResizeUpdate);
-  }
-  mapPctToDivCoordinates = (inout) => {
-    return {...inout,...this.pctToDiv(inout.left,inout.top)}
-  }
+
   render() {
     const formHandlers = {
       submit:this.handleSetupSubmit,
       delete:this.handleDelete
     }
-    const stageHandlers = {
+    const stageProps = {
       moveTo:this.moveTo,
       handleStageClick:this.handleStageClick,
       setDiv:this.setDiv,
-      handleRasiaClick:this.handleRasiaClick
+      handleRasiaClick:this.handleRasiaClick,
+      handleStageChange:this.handleStageChange,
+      stage:this.state.stage,
     }
     const addElementProps = {
       handleElementSelect:this.handleElementSelect,
       selectedElement:this.state.selectedElement
     }
-    let inouts = this.state.inouts.map(this.mapPctToDivCoordinates)
+    let inouts = this.state.inouts
+      .filter( (el) => (
+        el.type !== {all:'',in:'out',out:'in'}[this.state.visibilityFilter]
+      ));
     return <Lava
+      visibilityFilter={this.state.visibilityFilter}
+      handleVisibilityFilterChange={this.handleVisibilityFilterChange}
       toggle={this.state.toggle}
       inouts={inouts}
       selected={this.state.selected}
       handleModalToggle={this.handleModalToggle}
-      stageHandlers={stageHandlers}
+      stageProps={stageProps}
       addElementProps={addElementProps}
       formHandlers={formHandlers}
       handleUploadClick={this.handleUploadClick}/>

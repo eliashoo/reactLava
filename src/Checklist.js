@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Modal,Button,FormControl,FormGroup,ControlLabel,InputGroup,Checkbox,Glyphicon} from 'react-bootstrap';
+import {Modal,Button,FormControl,FormGroup,Checkbox,Glyphicon} from 'react-bootstrap';
 
 let checks = 0;
 

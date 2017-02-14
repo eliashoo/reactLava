@@ -23,4 +23,12 @@ const Elements = {
       {name:"channels out",type:"text"}],
   }
 }
+const fieldsToSpec = (type) => {
+  return Elements[type].fields.reduce( (acc, cur, i) => {
+    let {name,type} = cur;
+    acc[name] = type === 'checkbox' ? false : '';
+    return acc;
+  },{});
+}
 export default Elements;
+export {fieldsToSpec};

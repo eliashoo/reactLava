@@ -6,6 +6,7 @@ import Checklist from './Checklist';
 
 import Stage from './Stage';
 import SideForm from './SideForm.js';
+import VisibilityFilter from './VisibilityFilter';
 
 class Lava extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class Lava extends Component {
   }
   render() {
     let inout = (this.props.selected != null) && this.props.inouts.find( (inout) => inout.id === this.props.selected);
-
+    const {addElementProps,toggle,handleModalToggle,
+      visibilityFilter,handleVisibilityFilterChange} = this.props;
     return (
       <div>
         <Grid>
@@ -28,12 +30,12 @@ class Lava extends Component {
             <Col className="side-bar" md={2}>
               <Row>
                 <Col xs={4} md={12}>
-                  <AddElement {...this.props.addElementProps}/>
+                  <AddElement {...addElementProps}/>
                 </Col>
                 <Col xs={4} md={12}>
                   <Toggle name="open modal"
-                    on={this.props.toggle}
-                    onToggle={this.props.handleModalToggle}/>
+                    on={toggle}
+                    onToggle={handleModalToggle}/>
                   </Col>
                   <Col xs={4} md={12}>
                     <ButtonGroup>
@@ -48,6 +50,10 @@ class Lava extends Component {
                       </Button>
                     </ButtonGroup>
                   </Col>
+                  <Col xs={3} md={12}>
+                    <VisibilityFilter selected={visibilityFilter}
+                      handleChange={handleVisibilityFilterChange}/>
+                  </Col>
                   <Col xsHidden md={12}>
                     {inout && <SideForm inout={inout} formHandlers={this.props.formHandlers}/>}
                   </Col>
@@ -55,7 +61,7 @@ class Lava extends Component {
               </Col>
               <Col md={10}>
                 <Stage
-                  stageHandlers={this.props.stageHandlers}
+                  stageProps={this.props.stageProps}
                   selected={this.props.selected}
                   inouts={this.props.inouts}
                   toggle={this.props.toggle}
