@@ -3,7 +3,7 @@ import {DragSource} from 'react-dnd';
 
 var rasiaSource = {
   beginDrag: function (props) {
-    return { type:"RASIA", id:props.id, left:props.left, top:props.top };
+    return { type:"RASIA", id:props.id};
   }
 }
 
@@ -16,26 +16,26 @@ function collect(connect, monitor) {
 
 class DraggableComponent extends Component {
   render() {
-    if(this.props.isDragging) {
+    const {
+      className,
+      connectDragSource,
+      children,
+      selected,
+      isDragging,
+      ...props
+    } = this.props;
+
+    if(isDragging) {
       return null;
     }
 
-    const {left,top,connectDragSource} = this.props;
 
-    var style = {
-      left:left+"px",
-      top:top+"px",
-    }
-
-    if(this.props.style) {
-      Object.assign(style, this.props.style);
-    }
-
-    const classes = `${this.props.className} component`
+    const selectedClass = selected ? 'selected' : '';
+    const classes = `${className} component ${selectedClass}`
     return (
       connectDragSource(
-        <div className={classes} style={style} >
-          {this.props.children}
+        <div className={classes} {...props}>
+          {children}
         </div>)
     );
   }

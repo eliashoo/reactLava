@@ -1,11 +1,12 @@
-import React,{PropTypes,Component} from 'react';
+import React,{Component} from 'react';
 
 import lavaPic from './lava2.jpg';
 import Rasia from './Rasia';
-
+import {connect} from 'react-redux';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
+import * as inout_actions from './actions/actions';
 
 function collect(connect, monitor) {
   return {
@@ -15,70 +16,82 @@ function collect(connect, monitor) {
 
 const rasiaTarget = {
   drop(props, monitor, component) {
-    // x,y in viewport coordinates
-    const {x,y} = monitor.getSourceClientOffset();
+    let {x,y} = monitor.getClientOffset();
     const {id} = monitor.getItem();
-
-    let left = x-props.stageProps.stage.left;
-    let top = y-props.stageProps.stage.top;
-    const divToPct = (x,y) => {
-      const {width,height} = props.stageProps.stage;
-      return {left:x/width,top:y/height}
-    }
-    const {left:leftPct,top:topPct} = divToPct(left,top);
-    props.stageProps.moveTo(id,leftPct,topPct);
+    const {left,top} = component.clientToDivPct(x,y);
+    props.move_inout(id, left,top);
   }
 };
 
 class Stage extends Component {
   forceResizeUpdate = () => {
-    this.props.stageProps.handleStageChange(this.stage.getBoundingClientRect());
+    const {left,top,width,height} = this.stage.getBoundingClientRect();
+    this.stageRect = {left,top,width,height};
   }
   componentDidMount() {
-    window.addEventListener("resize", this.forceResizeUpdate);
+    window.addEventListener('resize',this.forceResizeUpdate);
   }
   componentWillUnmount() {
-    window.removeEventListener("resize",this.forceResizeUpdate);
+    window.addEventListener('resize',this.forceResizeUpdate);
   }
   handleClick = (e) => {
-    const {left,top} = this.props.stageProps.stage;
-    this.props.stageProps.handleStageClick(this.divToPct(
-      e.pageX-left,
-      e.pageY-top
-    ));
+
+    const {left,top} = this.clientToDivPct(e.clientX,e.clientY);
+
+    const inout = this.props.inouts.find( inout => inout.selected);
+    if(inout) {
+      this.props.move_inout(inout.id,left,top);
+      return;
+    }
+    if(this.props.selected) {
+      const {inouts} = this.props;
+
+      let maxId = Math.max(...inouts.map( inout => inout.id));
+
+      maxId = inouts.length > 0 ? maxId+1 : 0;
+
+      this.props.add_inout(maxId,left,top,this.props.selected);
+    }
   }
-  divToPct(x,y) {
-    const {width,height} = this.props.stageProps.stage;
-    return {left:x/width,top:y/height}
+  clientToDivPct(x,y) {
+    const {width,height,left,top} = this.stageRect;
+    return {
+      left:(x-left)/width,
+      top:(y-top)/height
+    }
   }
-  pctToDiv(x,y) {
-    const {width,height} = this.props.stageProps.stage;
-    return {left:x*width,top:y*height}
-  }
+
   mapPctToDivCoordinates = (inout) => {
     return {...inout,...this.pctToDiv(inout.left,inout.top)}
   }
   render() {
-    let {connectDropTarget,stageProps,inouts,selected,toggle,formHandlers} = this.props;
-    inouts = inouts.map(this.mapPctToDivCoordinates)
+    let {connectDropTarget,inouts} = this.props;
     return(
       connectDropTarget(
-        <div onClick={this.handleClick} style={{position:"relative"}} ref={ (div) => {this.stage = div} } >
+        <div onClick={this.handleClick} className="stage" ref={ (div) => { this.stage = div} } >
           <img  onLoad={this.forceResizeUpdate} src={lavaPic} alt="Stage map"
-            style={{opacity:0.5,width:"100%"}}/>
-            {inouts.map( ({id, ...r}) => (
-              <Rasia  handleRasiaClick={stageProps.handleRasiaClick}
-                selected={selected === id}
-                shoulOpenModal={toggle}
-                formHandlers={formHandlers}
-                inout={r}
-                id={id}
-                key={id}/>
-              ))}
-            </div>
-          )
-        )
+            style={{opacity:0.5,width:"100%"}}
+          />
+          {inouts.map( ({id, ...r}) => (
+            <Rasia
+              handleClick={this.props.select_inout}
+              inout={r}
+              id={id}
+              key={id}/>
+            ))}
+          </div>
+      )
+    )
   }
 }
+const mapStateToProps = (state) => {
+    return {
+      inouts: state.inouts.filter( (inout) => (
+        inout.type !== {all:'',in:'out',out:'in'}[state.visibilityFilter]
+      )),
+      selected: state.selected,
+    }
+}
+
 export default DragDropContext(HTML5Backend)(
-  DropTarget("RASIA", rasiaTarget, collect)(Stage));
+  connect(mapStateToProps,inout_actions)(DropTarget("RASIA", rasiaTarget, collect)(Stage)));

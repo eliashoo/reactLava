@@ -1,6 +1,6 @@
 import React from 'react';
 import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap';
-import Elements from './Elements';
+import Elements from '../Elements';
 
 function AddElement(props) {
   return (
@@ -9,7 +9,7 @@ function AddElement(props) {
         <Button key={type}
           bsSize="lg"
           title={Elements[type].title}
-          onClick={props.handleElementSelect}
+          onClick={() => props.select_element(type)}
           active={type === props.selectedElement}
           name={type}>
             <Glyphicon glyph={Elements[type].glyph} />

@@ -6,20 +6,6 @@
   text-align:center;
 }
 
-.component {
-  display:inline-block;
-  position:absolute;
-  font-size:1em;
-  color:black;
-  padding:2px;
-  border-radius:5px;
-  min-width:30px;
-  max-width:80px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
 .side-bar .footer .btn + .btn{
   margin-left:5px;
 }

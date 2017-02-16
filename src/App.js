@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import LavaContainer from './LavaContainer.js';
-
+import LavaContainer from './Containers/LavaContainer.js';
 
 var INOUTS = [
   {id: 0, left:850, top:100,type:"out",spec:{name:"mon 3",ch:3}},

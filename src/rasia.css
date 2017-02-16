@@ -1,0 +1,27 @@
+.comp-container {
+  position:absolute;
+  /* Width and height big enough to contain component*/
+  width:100px;
+  margin:-10px 0 0 -50px;
+  height:20px;
+  text-align:center;
+}
+
+.component {
+  display:inline-block;
+  color:black;
+  padding:2px;
+  border-radius:5px;
+  min-width:30px;
+  max-width:100px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.component.selected {
+  border:2px dashed black;
+}
+
+.stage {
+  position:relative;
+}
