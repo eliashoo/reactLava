@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {Col,Grid,Row,Glyphicon,Button,ButtonGroup} from 'react-bootstrap';
 import SelectedElement from '../Containers/SelectedElement';
-import ToggleModal from '../Containers/ToggleModal'
 import Checklist from '../Checklist';
 import Stage from '../Stage';
 import SideFormContainer from '../Containers/SideFormContainer';
@@ -21,10 +20,7 @@ class Lava extends Component {
                 <Col xs={4} md={12}>
                   <VisibilityFilter />
                 </Col>
-                <Col xs={2} md={12}>
-                  <ToggleModal name="open modal"/>
-                </Col>
-                <Col xs={2} md={12}>
+                <Col xs={4} md={12}>
                     <ButtonGroup>
                       {/* <Button title="Upload config(Only works in localhost)" bsSize="lg" onClick={() => this.props.handleUploadClick('upload')}>
                         <Glyphicon glyph="upload"/>

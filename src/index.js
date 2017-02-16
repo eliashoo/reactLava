@@ -15,12 +15,6 @@ import inouts from './reducers/inouts';
 import selectedElement from './reducers/selectedElement';
 import visibilityFilter from './reducers/visibilityFilter';
 
-const toggle = (state = false, action) => {
-  if(action.type === 'TOGGLE_MODAL') {
-    return !state
-  }
-  return state;
-}
 const showChecklist = (state = false, action) => {
   if(action.type === 'TOGGLE_CHECKLIST') {
     return !state
@@ -32,7 +26,6 @@ const reducers = combineReducers({
   inouts,
   selected: selectedElement,
   visibilityFilter,
-  toggle,
   showChecklist
 });
 
