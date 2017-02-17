@@ -5,7 +5,7 @@ import ModalChecklistContainer from '../Containers/ModalChecklistContainer';
 import Stage from '../Containers/Stage';
 import SideFormContainer from '../Containers/SideFormContainer';
 import VisibilityFilter from '../Components/VisibilityFilter';
-
+import InstructionsContainer from '../Containers/InstructionsContainer';
 class Lava extends Component {
   render() {
     return (
@@ -35,7 +35,7 @@ class Lava extends Component {
                         active={this.props.showChecklist}
                         onClick={this.props.toggle_checklist}
                       >
-                        <Glyphicon glyph="ok"/>
+                        <Glyphicon glyph="list"/>
                       </Button>
                     </ButtonGroup>
                   </Col>
@@ -53,6 +53,7 @@ class Lava extends Component {
                 </Col>
               </Row>
             </Grid>
+            <InstructionsContainer/>
           </div>
         )
 

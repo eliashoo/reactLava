@@ -92,3 +92,9 @@ export function filter(target) {
     filter:target
   }
 }
+
+export function toggle_instructions() {
+  return {
+    type:'TOGGLE_INSTRUCTIONS'
+  }
+}

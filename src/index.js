@@ -22,8 +22,16 @@ const showChecklist = (state = false, action) => {
   return state;
 }
 
+const toggleInstructions = (state = false, action) => {
+  if(action.type === 'TOGGLE_INSTRUCTIONS') {
+    return !state
+  }
+  return state
+}
+
 const reducers = combineReducers({
   inouts,
+  toggleInstructions,
   selected: selectedElement,
   visibilityFilter,
   showChecklist,

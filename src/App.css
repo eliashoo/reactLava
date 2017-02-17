@@ -5,7 +5,24 @@
   color: #f55;
   text-align:center;
 }
+.App-header a {
+  color:inherit;
+  text-decoration: none;
+}
 
+.App-header a:active{
+  color:inherit;
+}
+.App-header a:hover {
+  color:inherit;
+}
+.App-header a:visited {
+  color:inherit;
+}
+.App-header a:focus {
+  outline:none;
+  color:inherit;
+}
 .side-bar .footer .btn + .btn{
   margin-left:5px;
 }

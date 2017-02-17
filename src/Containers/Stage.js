@@ -86,7 +86,7 @@ class Stage extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-      inouts: state.inouts.filter( inout => inout.type != state.visibilityFilter)
+      inouts: state.inouts.filter( inout => inout.type !== state.visibilityFilter)
         // inout.type !== {all:'',in:'out',out:'in'}[state.visibilityFilter]
       ,
       selected: state.selected,

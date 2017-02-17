@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal,Button,FormControl,FormGroup,Checkbox,Glyphicon} from 'react-bootstrap';
+import {Button,FormControl,FormGroup,Checkbox,Glyphicon} from 'react-bootstrap';
 
 export default function Checklist({
   show,

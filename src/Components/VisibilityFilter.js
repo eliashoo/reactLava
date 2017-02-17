@@ -20,7 +20,6 @@ import {filter} from '../actions/actions';
     )
 }
 
-
 const mapStateToProps = (state) => {
   return {
     selected: state.visibilityFilter,
