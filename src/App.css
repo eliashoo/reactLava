@@ -20,43 +20,52 @@
   background-color: #5ad;
 }
 
-.toggleSwitch {
-  width:20px;
-  height:14px;
-  background-color:#f55;
-  position:absolute;
-  top:1px;
-  border-radius:20px;
-  transition: left .2s ease-out;
-}
-
-.toOn {
-  left:29px;
-  background-color:#f99;
-}
-.toOff {
-  left:1px;
-}
-
 .modal-body .form-group {
   overflow:hidden;
 }
 
 .side-bar {
-  background-color:white;
-  padding:15px;
-  border-radius:0 0 10px 10px;
-  border:2px solid #f55;
+  color:#111;
+  background-color:#f55;
+  /*padding:15px;*/
+  border-radius:0 0 10px 0;
+  border:2px solid #222;
   border-top:none;
+  border-left:none;
 }
-.side-bar .col-xs-4 {
-  margin-bottom:5px;
+.side-bar div[class*="col"] {
+  padding-top:15px;
+  padding-bottom:15px;
+  border-top:1px solid #f66;
 }
-.side-bar .col-xs-4:last-child {
+.side-bar div:first-child {
+  border-top:0;
+}
+.side-bar div:empty {
+  border-top:0;
+  padding:0;
+}
+.filter-link, .filter-link:focus {
+  display:inline-block;
+  padding:10px;
+  color:#111;
+}
+.filter-link:hover {
+  text-decoration: none;
+}
+.filter-link.selected {
+  text-decoration: line-through;
+}
+/*.side-bar div[class*="col"]:last-child {
   margin-bottom:0;
-}
+  border-bottom:0;
+}*/
 .side-bar .btn-group {
   display:block;
+}
+.side-bar div[class*="col-"]:nth-child(even) {
+  /*background-color:white;*/
+  /*border:1px solid black;*/
 }
 .toggle, .add-element, .upload {
   /*border-style:solid;
@@ -76,6 +85,9 @@
   /*padding:5px;
   border-width:0 2px;*/
 }
+ul.check-list {
+  list-style-type: none;
+}
 .check-checked.checkbox {
   display:inline-block;
 }
@@ -90,32 +102,29 @@
 }
 
 @media (max-width: 900px) {
-  .toggle {
-    height:56px;
-    border-radius:0 0 10px 10px;
-    border-width:0 2px 2px 2px;
+  .side-bar div[class*="col"] {
+    padding:2px;
   }
   .add-element {
-    border-radius:0 0 10px 10px;
-    padding:5px;
-    border-width:0 2px 2px 2px;
+    /*border-radius:0 0 10px 10px;*/
+    /*padding:5px;*/
+    /*border-width:0 2px 2px 2px;*/
   }
   .btn-group > .btn-lg {
-    padding:10px;
+    padding:9px;
     font-size:18px;
     line-height: 1;
   }
   .side-bar {
-    padding:0;
     border-radius:0px;
     border-width:0 0 2px 0;
   }
-  .side-bar .col-xs-4 {
+  .side-bar div:empty {
+    border-top:0;
     padding:0;
-    height:56px;
   }
   .side-bar .col-xs-4:first-child {
-    padding-left:10px;
+    padding-left:5px;
   }
 
 }

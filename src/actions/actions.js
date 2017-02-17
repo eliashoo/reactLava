@@ -86,3 +86,9 @@ export function fetch_stage() {
     .then(json => dispatch(receive_stage(json.stage)));
   }
 }
+export function filter(target) {
+  return {
+    type:'FILTER',
+    filter:target
+  }
+}

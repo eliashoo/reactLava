@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {Glyphicon} from 'react-bootstrap';
 import DraggableComponent from './DraggableComponent.js';
-import Elements from './Elements';
-import ElementComponents from './Components/ElementComponents';
-import './rasia.css';
+import Elements from '../Elements';
+import ElementComponents from './ElementComponents';
+import '../rasia.css';
 
 class Rasia extends Component {
   handleClick = (e) => {

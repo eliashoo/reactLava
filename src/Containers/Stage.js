@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
 
-import lavaPic from './lava2.jpg';
-import Rasia from './Rasia';
+import lavaPic from '../../images/lava2.jpg';
+import Rasia from '../Components/Rasia';
 import {connect} from 'react-redux';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
-import * as inout_actions from './actions/actions';
+import * as inout_actions from '../actions/actions';
 
 function collect(connect, monitor) {
   return {
@@ -86,9 +86,9 @@ class Stage extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-      inouts: state.inouts.filter( (inout) => (
-        inout.type !== {all:'',in:'out',out:'in'}[state.visibilityFilter]
-      )),
+      inouts: state.inouts.filter( inout => inout.type != state.visibilityFilter)
+        // inout.type !== {all:'',in:'out',out:'in'}[state.visibilityFilter]
+      ,
       selected: state.selected,
     }
 }

@@ -1,7 +1,10 @@
 const visibilityFilter = (state = 'all', action) => {
   switch (action.type) {
     case 'FILTER': {
-      return action.filter;
+      if(action.filter == state) {
+        return 'all';
+      }
+      return action.filter
     }
     default: {
       return state;

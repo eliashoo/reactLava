@@ -2,7 +2,7 @@ import React from 'react';
 
 import Elements from '../Elements.js';
 
-import FieldGroup from '../FieldGroup.js';
+import FieldGroup from './FieldGroup.js';
 
 function ElementSetup({type,horizontal,handleChange,spec}) {
   const fields = Elements[type].fields;

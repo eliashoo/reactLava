@@ -1,16 +1,16 @@
 import React,{Component} from 'react';
 import {Col,Grid,Row,Glyphicon,Button,ButtonGroup} from 'react-bootstrap';
 import SelectedElement from '../Containers/SelectedElement';
-import Checklist from '../Checklist';
-import Stage from '../Stage';
+import ModalChecklistContainer from '../Containers/ModalChecklistContainer';
+import Stage from '../Containers/Stage';
 import SideFormContainer from '../Containers/SideFormContainer';
-import VisibilityFilter from '../VisibilityFilter';
+import VisibilityFilter from '../Components/VisibilityFilter';
 
 class Lava extends Component {
   render() {
     return (
       <div>
-        <Grid>
+        <Grid fluid>
           <Row>
             <Col className="side-bar" md={2}>
               <Row>
@@ -22,11 +22,8 @@ class Lava extends Component {
                 </Col>
                 <Col xs={4} md={12}>
                     <ButtonGroup>
-                      {/* <Button title="Upload config(Only works in localhost)" bsSize="lg" onClick={() => this.props.handleUploadClick('upload')}>
-                        <Glyphicon glyph="upload"/>
-                      </Button> */}
                       <Button
-                        title="Download config(Works only in localhost)"
+                        title="Download sample config"
                         bsSize="lg"
                         onClick={this.props.fetch_stage}
                       >
@@ -35,6 +32,7 @@ class Lava extends Component {
                       <Button
                         title="toggle checklist"
                         bsSize="lg"
+                        active={this.props.showChecklist}
                         onClick={this.props.toggle_checklist}
                       >
                         <Glyphicon glyph="ok"/>
@@ -42,8 +40,12 @@ class Lava extends Component {
                     </ButtonGroup>
                   </Col>
                   <Col xs={12}>
+                    <ModalChecklistContainer/>
+                  </Col>
+                  <Col xs={12}>
                     <SideFormContainer/>
                   </Col>
+
                 </Row>
               </Col>
               <Col md={10}>
@@ -51,7 +53,6 @@ class Lava extends Component {
                 </Col>
               </Row>
             </Grid>
-            <Checklist show={this.props.showChecklist} closeChecklist={this.props.toggle_checklist}/>
           </div>
         )
 
