@@ -55,10 +55,10 @@
   padding-bottom:15px;
   border-top:1px solid #f66;
 }
-.side-bar div:first-child {
+.side-bar > .row > div:first-child {
   border-top:0;
 }
-.side-bar div:empty {
+.side-bar > .row > div:empty {
   border-top:0;
   padding:0;
 }
@@ -117,7 +117,18 @@ ul.check-list {
 .check-list {
   padding-left:5px;
 }
-
+.spinner {
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  animation: 2s infinite linear spin;
+  z-index:1000;
+}
+@keyframes spin {
+  0% { transform:rotate(0deg); }
+  100% { transform:rotate(360deg); }
+}
 @media (max-width: 900px) {
   .side-bar div[class*="col"] {
     padding:2px;

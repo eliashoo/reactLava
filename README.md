@@ -1,14 +1,14 @@
 # Stage map
 
-This is an app made for my personal usage. It is used to design stage and keep track of stage's monitors and instruments. It may not be useful to others nor myself; I have not tried it yet in live situation.
+This is an app made for my personal usage. It is used to design stage and keep track of stage's monitors and instruments. It may not be useful to others nor myself.
 
 ## Instructions
 
-Select element from toolbar and click on map to add it. You can control setup modal opening by toggling the switch.
+Select element from toolbar and click on map to add it. Every button has title with description about what is does.
 
 Element can be selected by clicking it and another click on stage moves it there. On desktop, elements can also be dragged with mouse.
 
-Elements are color coded and also marked with symbols
+Elements are color coded and also marked with symbols.
 
 | Color | Symbol | Meaning |
 | --- | --- | --- |
@@ -16,11 +16,13 @@ Elements are color coded and also marked with symbols
 | Red | Note | Input |
 | Blue | Grid | Stage box |
 
-Download button loads sample stage from backend.
+If you want to save your stage, you must login. Login works currently only with google account.
 
 ### Todo
-
-- Add backed
+- Optionally save to local stroge
+- Persist stage state when logging in.
+- Add routing and sub pages
+- Add option to remove stage
 - Add maybe some colorcoding to visualize connections
 
 ## Other info

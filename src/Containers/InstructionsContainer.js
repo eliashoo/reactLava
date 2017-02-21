@@ -1,10 +1,10 @@
 import Instructions from '../Components/Instructions';
 import {connect} from 'react-redux';
-import {toggle_instructions} from '../actions/actions';
+import {toggle_instructions} from '../actions/ui';
 
 const mapStateToProps = (state) => (
     {
-      showInstructions:state.toggleInstructions,
+      showInstructions:state.control.toggleInstructions,
     }
 );
 

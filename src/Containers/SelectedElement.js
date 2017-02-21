@@ -1,10 +1,10 @@
 import {connect} from 'react-redux';
 import AddElement from '../Components/AddElement';
 
-import * as actions from '../actions/actions';
+import * as actions from '../actions/ui';
 
 const mapStateToProps = (state) => {
-  return {selectedElement:state.selected}
+  return {selectedElementType:state.control.selectedElement}
 }
 
 const SelectedElement = connect(mapStateToProps,actions)(AddElement);

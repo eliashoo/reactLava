@@ -1,7 +1,7 @@
 import React,{PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {ControlLabel} from 'react-bootstrap';
-import {filter} from '../actions/actions';
+import {filter} from '../actions/ui';
 
  const VisibilityFilter = ({selected,filter}) => {
     const fields = ['in','out'];
@@ -22,7 +22,7 @@ import {filter} from '../actions/actions';
 
 const mapStateToProps = (state) => {
   return {
-    selected: state.visibilityFilter,
+    selected: state.control.visibilityFilter,
   }
 }
 export default connect(mapStateToProps,{filter})(VisibilityFilter);

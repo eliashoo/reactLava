@@ -10,7 +10,7 @@ function AddElement(props) {
           bsSize="lg"
           title={Elements[type].title}
           onClick={() => props.select_element(type)}
-          active={type === props.selectedElement}
+          active={type === props.selectedElementType}
           name={type}>
             <Glyphicon glyph={Elements[type].glyph} />
         </Button>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import '../App.css';
 import LavaContainer from '../Containers/LavaContainer.js';
-import {toggle_instructions} from '../actions/actions';
+import {toggle_instructions} from '../actions/ui';
 
 class App extends Component {
   render() {

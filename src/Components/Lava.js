@@ -6,6 +6,9 @@ import Stage from '../Containers/Stage';
 import SideFormContainer from '../Containers/SideFormContainer';
 import VisibilityFilter from '../Components/VisibilityFilter';
 import InstructionsContainer from '../Containers/InstructionsContainer';
+import Lock from './Lock';
+import StageListContainer from '../Containers/StageListContainer';
+
 class Lava extends Component {
   render() {
     return (
@@ -23,11 +26,12 @@ class Lava extends Component {
                 <Col xs={4} md={12}>
                     <ButtonGroup>
                       <Button
-                        title="Download sample config"
+                        title={this.props.saveDisabled ? "You must login to save stage" : "Save"}
                         bsSize="lg"
-                        onClick={this.props.fetch_stage}
+                        disabled={this.props.saveDisabled}
+                        onClick={this.props.save_stage}
                       >
-                        <Glyphicon glyph="download"/>
+                        <Glyphicon glyph="upload"/>
                       </Button>
                       <Button
                         title="toggle checklist"
@@ -37,6 +41,14 @@ class Lava extends Component {
                       >
                         <Glyphicon glyph="list"/>
                       </Button>
+                      <Button
+                        title="Add new stage"
+                        bsSize="lg"
+                        onClick={this.props.add_stage}
+                      >
+                        <Glyphicon glyph="plus"/>
+                      </Button>
+
                     </ButtonGroup>
                   </Col>
                   <Col xs={12}>
@@ -44,6 +56,28 @@ class Lava extends Component {
                   </Col>
                   <Col xs={12}>
                     <SideFormContainer/>
+                    <ButtonGroup>
+                      <Lock />
+                      <Button
+                        title="Edit stage name"
+                        // bsSize="lg"
+                        onClick={this.props.edit_stage}
+                        >
+                          <Glyphicon glyph="cog"/>
+                        </Button>
+                        <Button
+                          title="Show stages"
+                          // bsSize="lg"
+                          onClick={this.props.show_stages}
+                          >
+                            <Glyphicon glyph="list"/>
+                          </Button>
+
+                    </ButtonGroup>
+
+                  </Col>
+                  <Col xs={12}>
+                    <StageListContainer />
                   </Col>
 
                 </Row>

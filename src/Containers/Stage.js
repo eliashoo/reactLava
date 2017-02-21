@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
-import * as inout_actions from '../actions/actions';
+import {add_inout,move_inout,select_inout} from '../actions/inout';
 
 function collect(connect, monitor) {
   return {
@@ -24,16 +24,6 @@ const rasiaTarget = {
 };
 
 class Stage extends Component {
-  forceResizeUpdate = () => {
-    const {left,top,width,height} = this.stage.getBoundingClientRect();
-    this.stageRect = {left,top,width,height};
-  }
-  componentDidMount() {
-    window.addEventListener('resize',this.forceResizeUpdate);
-  }
-  componentWillUnmount() {
-    window.addEventListener('resize',this.forceResizeUpdate);
-  }
   handleClick = (e) => {
 
     const {left,top} = this.clientToDivPct(e.clientX,e.clientY);
@@ -54,7 +44,7 @@ class Stage extends Component {
     }
   }
   clientToDivPct(x,y) {
-    const {width,height,left,top} = this.stageRect;
+    const {left,top,width,height} = this.stage.getBoundingClientRect();
     return {
       left:(x-left)/width,
       top:(y-top)/height
@@ -65,33 +55,35 @@ class Stage extends Component {
     return {...inout,...this.pctToDiv(inout.left,inout.top)}
   }
   render() {
-    let {connectDropTarget,inouts} = this.props;
+    let {loading,connectDropTarget,inouts} = this.props;
     return(
-      connectDropTarget(
-        <div onClick={this.handleClick} className="stage" ref={ (div) => { this.stage = div} } >
-          <img  onLoad={this.forceResizeUpdate} src={lavaPic} alt="Stage map"
-            style={{opacity:0.5,width:"100%"}}
-          />
-          {inouts.map( ({id, ...r}) => (
-            <Rasia
-              handleClick={this.props.select_inout}
-              inout={r}
-              id={id}
-              key={id}/>
-            ))}
+      <div>
+        {connectDropTarget(
+          <div onClick={this.handleClick} className={`stage${loading ? ' loading' : ''}`} ref={ (div) => { this.stage = div} } >
+            <img  src={lavaPic} alt="Stage map"
+              style={{opacity:0.5,width:"100%"}}
+            />
+            {inouts.map( ({id, ...r}) => (
+              <Rasia
+                handleClick={this.props.select_inout}
+                inout={r}
+                id={id}
+                key={id}/>
+              ))}
           </div>
-      )
+        )}
+        {loading && <div className="spinner spinner-stage"></div>}
+      </div>
     )
   }
 }
 const mapStateToProps = (state) => {
     return {
-      inouts: state.inouts.filter( inout => inout.type !== state.visibilityFilter)
-        // inout.type !== {all:'',in:'out',out:'in'}[state.visibilityFilter]
-      ,
-      selected: state.selected,
+      inouts: state.data.currentStage.inouts.filter( inout => inout.type !== state.control.visibilityFilter),
+      selected: state.control.selectedElement,
+      loading: state.communication.stage.fetching,
     }
 }
 
 export default DragDropContext(HTML5Backend)(
-  connect(mapStateToProps,inout_actions)(DropTarget("RASIA", rasiaTarget, collect)(Stage)));
+  connect(mapStateToProps,{add_inout,move_inout,select_inout})(DropTarget("RASIA", rasiaTarget, collect)(Stage)));
