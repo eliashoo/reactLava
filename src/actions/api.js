@@ -28,6 +28,7 @@ export function fetch_stage(id) {
 }
 export function fetch_stage_names() {
   return (dispatch,getState,{apiService}) => {
+    dispatch(request_stage_names())
     return (
       apiService.getAll()
       .then( response => response.json())

@@ -59,8 +59,11 @@ class Lava extends Component {
                   <ButtonGroup>
                     <Lock />
                     <Button
-                      title="Edit stage name"
-                      // bsSize="lg"
+                      disabled={this.props.saveDisabled}
+                      title={this.props.saveDisabled ?
+                        "You must login to edit" :
+                        "Edit stage name"
+                      }
                       onClick={this.props.edit_stage}
                     >
                       <Glyphicon glyph="cog"/>

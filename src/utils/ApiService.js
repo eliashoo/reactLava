@@ -8,6 +8,11 @@ export default class ApiService {
         Authorization:`Bearer ${this.token}`,
         'Content-Type':'application/json',
       })
+    } else {
+      return new Headers({
+        'x-apikey':'58a5d5be41e63fcf222c9c4f',
+        'Content-Type':'application/json',
+      })
     }
     throw new Error("Need valid token");
   }

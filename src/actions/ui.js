@@ -1,3 +1,4 @@
+import {fetch_stage_names} from './api'
 export function select_element(type) {
   return {
     type:'ELEMENT_SELECT',
@@ -31,7 +32,8 @@ export function edit_stage() {
 }
 
 export function show_stages() {
-  return {
-    type:'SHOW_STAGES'
+  return (dispatch) => {
+    dispatch(fetch_stage_names())
+    dispatch({type:'SHOW_STAGES'})
   }
 }
