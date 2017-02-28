@@ -9,9 +9,10 @@ function ElementSetup({type,horizontal,handleChange,spec}) {
   spec = spec || {}
   return (
     <div>
-      {fields.map( (field) => (
+      {fields.map( (field ,i) => (
         <FieldGroup horizontal={horizontal}
           key={field.name}
+          autoFocus={i == 0}
           id={`${field.name}Text`}
           label={field.name}
           type={field.type}
