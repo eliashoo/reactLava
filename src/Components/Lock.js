@@ -13,7 +13,7 @@ class Lock extends Component {
     this.lock = new Auth0Lock(clientId, domain);
     this.lock.on('authenticated', this.doAuthentication);
     if(localStorage.getItem('id_token')) {
-      props.loggedIn();
+      props.loggedIn(localStorage.getItem('id_token'));
     }
   }
   showLock = () => {
@@ -26,7 +26,7 @@ class Lock extends Component {
   doAuthentication = (authResult) => {
     console.log(authResult);
     localStorage.setItem('id_token', authResult.idToken);
-    this.props.loggedIn();
+    this.props.loggedIn(authResult.idToken);
   }
   render() {
     const method = this.props.authenticated ? this.logout : this.showLock

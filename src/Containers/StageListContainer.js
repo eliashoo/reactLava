@@ -7,7 +7,7 @@ const mapStateToProps = (state) => (
     {
       stages:state.data.stages,
       loading:state.communication.stageNames.fetching,
-      currentId:state.data.currentStage.id,
+      currentId:state.data.currentStage.currentStage.id,
       editStage:state.control.editStage,
       show:state.control.showStageList,
     }

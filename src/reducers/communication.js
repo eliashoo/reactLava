@@ -97,3 +97,5 @@ export default function communication(state = initialState, action) {
     }
   }
 }
+
+export const getStageIsFetching = (state) => state.stage.fetching

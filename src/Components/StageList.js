@@ -26,10 +26,14 @@ export default function StageList({stages,fetch_stage,loading,currentId,editStag
 }
 
 function StageListEntry({id,currentId,name,fetch_stage}) {
+  const visibleName = name === '' ? 'unnamed' : name
   return (
     <li>
       <a href="#" onClick={(e) => { e.preventDefault(); fetch_stage(id) }}>
-        {currentId === id ? <strong>{name}</strong> : name}
+        {currentId === id ?
+          <strong>{visibleName}</strong> :
+          visibleName
+        }
       </a>
     </li>
   )

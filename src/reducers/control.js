@@ -71,3 +71,5 @@ export default combineReducers(
     showStageList,
   }
 );
+export const getVisibilityFilter = (state) => state.visibilityFilter
+export const getSelectedElement = (state) => state.selectedElement
