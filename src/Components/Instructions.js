@@ -39,7 +39,8 @@ export default function Instructions({showInstructions,toggle_instructions}) {
         </tr>
         </tbody>
         </Table>
-        <p>If you want to save your stage, you must login. Login works currently only with google account.</p>      </Modal.Body>
+        <p>If you want to save your stage, you must login. Login works currently only with google account.</p>
+      </Modal.Body>
     </Modal>
   )
 }
