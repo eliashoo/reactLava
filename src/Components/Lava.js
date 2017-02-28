@@ -24,73 +24,72 @@ class Lava extends Component {
                   <VisibilityFilter />
                 </Col>
                 <Col xs={4} md={12}>
-                    <ButtonGroup>
-                      <Button
-                        title={this.props.saveDisabled ? "You must login to save stage" : "Save"}
-                        bsSize="lg"
-                        disabled={this.props.saveDisabled}
-                        onClick={this.props.save_stage}
-                      >
-                        <Glyphicon glyph="upload"/>
-                      </Button>
-                      <Button
-                        title="toggle checklist"
-                        bsSize="lg"
-                        active={this.props.showChecklist}
-                        onClick={this.props.toggle_checklist}
-                      >
-                        <Glyphicon glyph="list"/>
-                      </Button>
-                      <Button
-                        title="Add new stage"
-                        bsSize="lg"
-                        onClick={this.props.add_stage}
-                      >
-                        <Glyphicon glyph="plus"/>
-                      </Button>
+                  <ButtonGroup>
+                    <Button
+                      title={this.props.saveDisabled ? "You must login to save stage" : "Save"}
+                      bsSize="lg"
+                      disabled={this.props.saveDisabled}
+                      onClick={this.props.save_stage}
+                    >
+                      <Glyphicon glyph="upload"/>
+                    </Button>
+                    <Button
+                      title="toggle checklist"
+                      bsSize="lg"
+                      active={this.props.showChecklist}
+                      onClick={this.props.toggle_checklist}
+                    >
+                      <Glyphicon glyph="list"/>
+                    </Button>
+                    <Button
+                      title="Add new stage"
+                      bsSize="lg"
+                      onClick={this.props.add_stage}
+                    >
+                      <Glyphicon glyph="plus"/>
+                    </Button>
 
-                    </ButtonGroup>
-                  </Col>
-                  <Col xs={12}>
-                    <ModalChecklistContainer/>
-                  </Col>
-                  <Col xs={12}>
-                    <SideFormContainer/>
-                    <ButtonGroup>
-                      <Lock />
-                      <Button
-                        title="Edit stage name"
-                        // bsSize="lg"
-                        onClick={this.props.edit_stage}
-                        >
-                          <Glyphicon glyph="cog"/>
-                        </Button>
-                        <Button
-                          title="Show stages"
-                          // bsSize="lg"
-                          onClick={this.props.show_stages}
-                          >
-                            <Glyphicon glyph="list"/>
-                          </Button>
+                  </ButtonGroup>
+                </Col>
+                <Col xs={12}>
+                  <ModalChecklistContainer/>
+                </Col>
+                <Col xs={12}>
+                  <SideFormContainer/>
+                  <ButtonGroup>
+                    <Lock />
+                    <Button
+                      title="Edit stage name"
+                      // bsSize="lg"
+                      onClick={this.props.edit_stage}
+                    >
+                      <Glyphicon glyph="cog"/>
+                    </Button>
+                    <Button
+                      title="Show stages"
+                      // bsSize="lg"
+                      onClick={this.props.show_stages}
+                    >
+                      <Glyphicon glyph="list"/>
+                    </Button>
 
-                    </ButtonGroup>
+                  </ButtonGroup>
 
-                  </Col>
-                  <Col xs={12}>
-                    <StageListContainer />
-                  </Col>
+                </Col>
+                <Col xs={12}>
+                  <StageListContainer />
+                </Col>
 
                 </Row>
               </Col>
-              <Col md={10}>
-                <Stage/>
-                </Col>
-              </Row>
-            </Grid>
-            <InstructionsContainer/>
-          </div>
-        )
-
+            <Col md={10}>
+              <Stage/>
+            </Col>
+          </Row>
+        </Grid>
+        <InstructionsContainer/>
+      </div>
+    )
   }
 }
 export default Lava;

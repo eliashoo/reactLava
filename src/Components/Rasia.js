@@ -1,42 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Glyphicon} from 'react-bootstrap';
-import DraggableComponent from './DraggableComponent.js';
 import Elements from '../Elements';
 import ElementComponents from './ElementComponents';
 import '../rasia.css';
 
-class Rasia extends Component {
-  handleClick = (e) => {
-    e.stopPropagation();
-    this.props.handleClick(this.props.id);
-  }
-  render() {
-    const {left,top,type,spec,selected} = this.props.inout;
-    const {id} = this.props;
+export default function Rasia({inout,selected,handleClick}) {
+  const {type,spec} = inout;
 
-    let Comp = ElementComponents[type];
+  let Comp = ElementComponents[type];
 
-    const style = {
-      left:left*100+"%",
-      top:top*100+"%"
-    }
+  const selectedClass = selected ? 'selected' : ''
 
-    let className= `comp-${type}`;
-    return (
-      <div className="comp-container"
-        style={style}
-      >
-          <DraggableComponent
-            onClick={this.handleClick}
-            className={className}
-            selected={selected}
-            id={id}
-          >
-            <Glyphicon glyph={Elements[type].glyph}/>
-            <Comp {...spec}/>
-          </DraggableComponent>
-      </div>
-    );
-  }
+  let componentClassName= `comp-${type} component ${selectedClass}`;
+
+  return (
+    <div onClick={handleClick} className={`${componentClassName}`}>
+      <Glyphicon glyph={Elements[type].glyph}/>
+      <Comp {...spec}/>
+    </div>
+  );
+
 }
-export default Rasia;

@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import {DragSource} from 'react-dnd';
+import Rasia from './Rasia'
 
 var rasiaSource = {
-  beginDrag: function (props) {
-    return { type:"RASIA", id:props.id};
+  beginDrag: function ({id}) {
+    return { type:"RASIA", id};
   }
 }
 
-function collect(connect, monitor) {
+function collect({dragSource}, monitor) {
   return {
-    connectDragSource: connect.dragSource(),
+    connectDragSource: dragSource(),
     isDragging: monitor.isDragging()
   };
 }
@@ -17,27 +18,17 @@ function collect(connect, monitor) {
 class DraggableComponent extends Component {
   render() {
     const {
-      className,
       connectDragSource,
-      children,
-      selected,
       isDragging,
-      ...props
+      hideWhenDrag,
+      children
     } = this.props;
 
-    if(isDragging) {
+    if(hideWhenDrag && isDragging) {
       return null;
     }
-
-
-    const selectedClass = selected ? 'selected' : '';
-    const classes = `${className} component ${selectedClass}`
-    return (
-      connectDragSource(
-        <div className={classes} {...props}>
-          {children}
-        </div>)
-    );
+    // DragSource can only wrap native elements so div is needed here
+    return connectDragSource(<div style={{display:'inline-block'}}>{children}</div>);
   }
 }
 
