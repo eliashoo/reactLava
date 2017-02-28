@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 
 const inout = (state = {},action) => {
-  if(action.type == 'ADD_INOUT') {
+  if(action.type === 'ADD_INOUT') {
     return {
       id:action.id,
       left:action.left,
@@ -52,7 +52,9 @@ const inoutsById = (state = {}, action) => {
       {})
     )
     case 'REMOVE_INOUT':
-    delete state[action.id]
+      delete state[action.id]
+      return {...state}
+
     default:
     return state
   }
@@ -96,8 +98,14 @@ const currentStageOld = (state = initialState,action) => {
       return {
         id:action.id,
         local:false,
-        name:action.name
+        name:action.name,
+        selectedId:null
       }
+    case 'STAGE_SAVED':
+    return {
+      ...state,
+      local:false,
+    }
     case 'LOGGED_OUT':
     case 'ADD_NEW':
       return initialState

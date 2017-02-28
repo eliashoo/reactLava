@@ -91,6 +91,14 @@ export default function communication(state = initialState, action) {
         }
       }
     }
+    case 'SAVE_STAGE_FAILED':
+    return {
+      ...state,
+      stage: {
+        fetching:false,
+        error:action.reason,
+      }
+    }
 
     default: {
       return state;

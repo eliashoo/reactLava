@@ -50,8 +50,8 @@ export function save_stage() {
             save_stage_changes({currentStage})
 
     dispatch(action)
-    .catch( ({message}) => dispatch(save_stage_failed(message)))
     .then( stage => dispatch(stage_saved(stage)))
+    .catch( ({message}) => dispatch(save_stage_failed(message)))
   }
 }
 function save_stage_changes({currentStage}) {

@@ -8,7 +8,8 @@ import {save_stage} from '../actions/api';
 const mapStateToProps = (state) => {
   return {
     showChecklist:state.control.showChecklist,
-    saveDisabled:!state.session.loggedIn
+    saveDisabled:!state.session.loggedIn,
+    error:state.communication.stage.error
   }
 }
 

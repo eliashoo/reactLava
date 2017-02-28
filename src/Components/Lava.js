@@ -8,11 +8,13 @@ import VisibilityFilter from '../Components/VisibilityFilter';
 import InstructionsContainer from '../Containers/InstructionsContainer';
 import Lock from './Lock';
 import StageListContainer from '../Containers/StageListContainer';
+import Error from './Error';
 
 class Lava extends Component {
   render() {
     return (
       <div>
+        {this.props.error && <Error error={this.props.error}/>}
         <Grid fluid>
           <Row>
             <Col className="side-bar" md={2}>
@@ -26,7 +28,9 @@ class Lava extends Component {
                 <Col xs={4} md={12}>
                   <ButtonGroup>
                     <Button
-                      title={this.props.saveDisabled ? "You must login to save stage" : "Save"}
+                      title={this.props.saveDisabled ?
+                        "Only admin can save changes" :
+                        "Save"}
                       bsSize="lg"
                       disabled={this.props.saveDisabled}
                       onClick={this.props.save_stage}
@@ -61,7 +65,7 @@ class Lava extends Component {
                     <Button
                       disabled={this.props.saveDisabled}
                       title={this.props.saveDisabled ?
-                        "You must login to edit" :
+                        "Only admin can edit stage" :
                         "Edit stage name"
                       }
                       onClick={this.props.edit_stage}

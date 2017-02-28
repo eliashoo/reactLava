@@ -14,7 +14,6 @@ export default class ApiService {
         'Content-Type':'application/json',
       })
     }
-    throw new Error("Need valid token");
   }
   _handleErrors(response) {
     if (!response.ok) {
